@@ -1,0 +1,213 @@
+@import "tailwindcss";
+
+@theme {
+  /* Color tokens */
+  --color-ink: #0a0a0a;
+  --color-paper: #f5f2ec;
+  --color-accent: #e8320a;
+  --color-accent-warm: #f5a623;
+  --color-steel: #1a1a2e;
+
+  /* Font family tokens */
+  --font-display: var(--font-fraunces);
+  --font-sans: var(--font-dm-sans);
+  --font-mono: var(--font-dm-mono);
+
+  /* 8pt spacing scale — base unit 8px.
+     p-0.5 = 4px, p-1 = 8px, p-2 = 16px, p-3 = 24px, p-4 = 32px, ... */
+  --spacing: 0.5rem;
+
+  /* Shadow tokens (warm ink) */
+  --shadow-xs: 0 1px 2px 0 rgb(10 10 10 / 0.04);
+  --shadow-sm:
+    0 1px 3px 0 rgb(10 10 10 / 0.08), 0 1px 2px -1px rgb(10 10 10 / 0.06);
+  --shadow-md:
+    0 4px 6px -1px rgb(10 10 10 / 0.1), 0 2px 4px -2px rgb(10 10 10 / 0.06);
+  --shadow-lg:
+    0 10px 15px -3px rgb(10 10 10 / 0.1), 0 4px 6px -4px rgb(10 10 10 / 0.08);
+  --shadow-xl:
+    0 20px 25px -5px rgb(10 10 10 / 0.12), 0 8px 10px -6px rgb(10 10 10 / 0.08);
+  --shadow-glow:
+    0 0 0 1px rgb(232 50 10 / 0.2), 0 8px 24px -4px rgb(232 50 10 / 0.3);
+
+  /* Motion easing tokens */
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out-quint: cubic-bezier(0.83, 0, 0.17, 1);
+  --ease-snap: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Motion duration tokens */
+  --duration-fast: 150ms;
+  --duration-base: 240ms;
+  --duration-slow: 400ms;
+  --duration-deliberate: 700ms;
+
+  /* Animation tokens */
+  --animate-marquee: marquee 38s linear infinite;
+  --animate-grid-shift: grid-shift 24s linear infinite;
+  --animate-orb-a: orb-float-a 14s ease-in-out infinite;
+  --animate-orb-b: orb-float-b 18s ease-in-out infinite;
+  --animate-scroll-hint: scroll-hint 1.8s cubic-bezier(0.83, 0, 0.17, 1)
+    infinite;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes grid-shift {
+  from {
+    background-position:
+      0 0,
+      0 0;
+  }
+  to {
+    background-position:
+      60px 60px,
+      60px 60px;
+  }
+}
+
+@keyframes orb-float-a {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(40px, -30px, 0) scale(1.08);
+  }
+}
+
+@keyframes orb-float-b {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(-30px, 40px, 0) scale(0.92);
+  }
+}
+
+@keyframes scroll-hint {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(220%);
+    opacity: 0;
+  }
+}
+
+@keyframes marker-pulse {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+
+/* Custom map marker (HTML element passed to mapboxgl.Marker) */
+.map-marker {
+  position: relative;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+}
+.map-marker .ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background-color: var(--color-accent);
+  animation: marker-pulse 2.4s var(--ease-out-quint) infinite;
+}
+.map-marker .dot {
+  position: absolute;
+  inset: 6px;
+  border-radius: 9999px;
+  background-color: var(--color-accent);
+  box-shadow:
+    0 0 0 2px var(--color-paper),
+    0 0 12px rgb(232 50 10 / 0.6);
+}
+
+/* Mapbox popup theming */
+.mapboxgl-popup-content {
+  background-color: var(--color-steel) !important;
+  color: var(--color-paper) !important;
+  border-radius: 6px !important;
+  padding: 0 !important;
+  box-shadow: 0 12px 32px -8px rgb(10 10 10 / 0.6) !important;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  border: 1px solid rgb(232 50 10 / 0.35);
+}
+.mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip {
+  border-top-color: var(--color-steel) !important;
+}
+.mapboxgl-popup-anchor-top .mapboxgl-popup-tip {
+  border-bottom-color: var(--color-steel) !important;
+}
+.mapboxgl-popup-anchor-left .mapboxgl-popup-tip {
+  border-right-color: var(--color-steel) !important;
+}
+.mapboxgl-popup-anchor-right .mapboxgl-popup-tip {
+  border-left-color: var(--color-steel) !important;
+}
+.mapboxgl-popup-close-button {
+  display: none !important;
+}
+.map-popup {
+  padding: 12px 16px;
+  min-width: 160px;
+}
+.map-popup .city {
+  font-family: var(--font-display), serif;
+  font-size: 1.25rem;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+.map-popup .count {
+  margin-top: 4px;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-feature-settings: "ss01", "cv11";
+}
+
+::selection {
+  background-color: var(--color-accent);
+  color: var(--color-paper);
+}
+
+@media (min-width: 768px) {
+  .bento-grid {
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(3, minmax(180px, 1fr));
+    grid-template-areas:
+      "billboard billboard videotron videotron"
+      "billboard billboard neonbox   neonbox"
+      "megatron  megatron  megatron  bridge";
+  }
+}
