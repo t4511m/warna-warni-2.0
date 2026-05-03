@@ -48,6 +48,18 @@
   --animate-orb-b: orb-float-b 18s ease-in-out infinite;
   --animate-scroll-hint: scroll-hint 1.8s cubic-bezier(0.83, 0, 0.17, 1)
     infinite;
+  --animate-nav-fade: nav-fade 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes nav-fade {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes marquee {

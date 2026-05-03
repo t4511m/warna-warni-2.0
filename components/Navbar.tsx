@@ -41,9 +41,10 @@ export function Navbar() {
     <>
       <header
         data-scrolled={scrolled}
-        className="fixed inset-x-0 top-0 z-40 border-b border-transparent data-[scrolled=true]:border-ink/8 data-[scrolled=true]:bg-paper/78 data-[scrolled=true]:backdrop-blur-md data-[scrolled=true]:shadow-sm"
+        className="fixed inset-x-0 top-0 z-40 animate-nav-fade border-b border-transparent backdrop-blur-sm data-[scrolled=true]:border-ink/10 data-[scrolled=true]:bg-paper/85 data-[scrolled=true]:backdrop-blur-xl data-[scrolled=true]:shadow-[0_1px_0_0_rgb(10_10_10/0.04),0_10px_30px_-14px_rgb(10_10_10/0.18)]"
         style={{
-          transitionProperty: "background-color, backdrop-filter, border-color, box-shadow",
+          transitionProperty:
+            "background-color, backdrop-filter, border-color, box-shadow",
           transitionDuration: "var(--duration-base)",
           transitionTimingFunction: "var(--ease-out-quint)",
         }}
@@ -51,10 +52,10 @@ export function Navbar() {
         <div className="mx-auto flex max-w-7xl items-center justify-between px-3 py-2 md:px-6 md:py-3">
           <Link
             href="/"
-            aria-label="warna-warni — home"
+            aria-label="WW Demo — home"
             className="font-display text-2xl leading-none tracking-tight text-ink md:text-[28px]"
           >
-            warna-warni
+            WW Demo
           </Link>
 
           <nav aria-label="Primary" className="hidden items-center gap-7 md:flex">
@@ -62,12 +63,21 @@ export function Navbar() {
               <Link
                 key={l.href}
                 href={l.href}
-                className="text-sm text-ink/80 hover:text-ink"
+                className="group relative text-sm text-ink/80 hover:text-ink"
                 style={{
-                  transition: "color var(--duration-fast) var(--ease-out-quint)",
+                  transition:
+                    "color var(--duration-fast) var(--ease-out-quint)",
                 }}
               >
-                {l.label}
+                <span>{l.label}</span>
+                <span
+                  aria-hidden
+                  className="absolute -bottom-1 left-0 right-0 block h-px origin-left scale-x-0 bg-ink group-hover:scale-x-100"
+                  style={{
+                    transition:
+                      "transform var(--duration-base) var(--ease-out-quint)",
+                  }}
+                />
               </Link>
             ))}
             <Link
@@ -157,7 +167,7 @@ function MobilePanel({
       >
         <div className="flex items-center justify-between">
           <span className="font-display text-2xl tracking-tight text-ink">
-            warna-warni
+            WW Demo
           </span>
           <button
             type="button"

@@ -12,7 +12,7 @@ export function WhatsAppButton() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat with us on WhatsApp"
-      className="group fixed bottom-5 right-5 z-50 inline-flex h-14 w-14 items-center justify-center rounded-full text-paper shadow-lg hover:-translate-y-px hover:shadow-xl md:bottom-8 md:right-8"
+      className="group fixed bottom-5 right-5 z-50 inline-flex h-[4.2rem] w-[4.2rem] items-center justify-center rounded-full text-paper shadow-lg hover:-translate-y-px hover:shadow-xl md:bottom-8 md:right-8"
       style={{
         backgroundColor: "#25D366",
         transition:
@@ -36,8 +36,8 @@ export function WhatsAppButton() {
 function WhatsAppGlyph() {
   return (
     <svg
-      width="26"
-      height="26"
+      width="16"
+      height="16"
       viewBox="0 0 24 24"
       fill="currentColor"
       aria-hidden
