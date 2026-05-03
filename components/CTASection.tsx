@@ -1,6 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
+import { useRef, useState } from "react";
+import { MagneticButton } from "@/components/MagneticButton";
 import { Reveal } from "@/components/Reveal";
 
 const PRODUCT_OPTIONS = [
@@ -62,6 +69,13 @@ type Status =
 export function CTASection() {
   const [form, setForm] = useState<FormState>(INITIAL);
   const [status, setStatus] = useState<Status>({ kind: "idle" });
+  const reduced = useReducedMotion();
+  const headingRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: headingRef,
+    offset: ["start end", "end start"],
+  });
+  const headingScale = useTransform(scrollYProgress, [0, 0.5, 1], [0.96, 1.02, 0.98]);
 
   function update<K extends keyof FormState>(key: K, value: FormState[K]) {
     setForm((f) => ({ ...f, [key]: value }));
@@ -107,22 +121,31 @@ export function CTASection() {
       <div className="mx-auto grid max-w-7xl gap-12 px-6 py-24 md:grid-cols-2 md:gap-16 md:px-10 md:py-32 lg:px-12">
         <Reveal>
           <div className="flex flex-col gap-10">
-            <div>
+            <div ref={headingRef} className="overflow-visible pb-1">
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
                 Get in touch
               </p>
-              <h2
-                className="mt-4 font-semibold tracking-[-0.025em] text-ink"
-                style={{
-                  fontSize: "clamp(2.25rem, 5vw, 4rem)",
-                  lineHeight: 1.05,
-                  fontWeight: 700,
-                }}
+              <motion.h2
+                style={
+                  reduced
+                    ? undefined
+                    : { scale: headingScale, transformOrigin: "left center" }
+                }
+                className="mt-4 pb-1 font-semibold tracking-[-0.025em] text-ink"
               >
-                Ready to be seen by{" "}
-                <span className="text-accent">millions?</span>
-              </h2>
-              <p className="mt-5 max-w-md text-base text-muted md:text-lg">
+                <span
+                  className="block"
+                  style={{
+                    fontSize: "clamp(2.25rem, 5vw, 4rem)",
+                    lineHeight: 1.08,
+                    fontWeight: 700,
+                  }}
+                >
+                  Ready to be seen by{" "}
+                  <span className="text-accent">millions?</span>
+                </span>
+              </motion.h2>
+              <p className="mt-5 max-w-md pb-1 text-base leading-relaxed text-muted md:text-lg">
                 Tell us about your campaign — we&apos;ll come back within one
                 business day with a tailored proposal.
               </p>
@@ -215,16 +238,18 @@ export function CTASection() {
                 </div>
               </div>
 
-              <button
-                type="submit"
-                className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-ink px-7 py-3.5 text-base font-medium text-paper hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-60"
-                style={{
-                  transition:
-                    "transform var(--duration-base) var(--ease-out-quint)",
-                }}
-              >
-                {submitting ? "Sending…" : "Send proposal request"}
-              </button>
+              <MagneticButton pull={0.25} className="mt-6 inline-block w-full">
+                <button
+                  type="submit"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-ink px-7 py-3.5 text-base font-medium text-paper hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-60"
+                  style={{
+                    transition:
+                      "transform var(--duration-base) var(--ease-out-quint)",
+                  }}
+                >
+                  {submitting ? "Sending…" : "Send proposal request"}
+                </button>
+              </MagneticButton>
 
               {status.kind === "success" && (
                 <p className="mt-4 text-sm font-medium text-ink">

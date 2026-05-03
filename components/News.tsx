@@ -12,15 +12,15 @@ export async function News() {
     <section className="bg-paper text-ink" id="journal">
       <div className="mx-auto max-w-7xl px-6 py-24 md:px-10 md:py-32 lg:px-12">
         <Reveal>
-          <div className="mx-auto max-w-3xl text-center">
+          <div className="mx-auto max-w-3xl pb-1 text-center">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
               Journal
             </p>
             <h2
-              className="mt-4 font-semibold tracking-[-0.025em] text-ink"
+              className="mt-4 pb-1 font-semibold tracking-[-0.025em] text-ink"
               style={{
                 fontSize: "clamp(2rem, 5vw, 3.75rem)",
-                lineHeight: 1.05,
+                lineHeight: 1.08,
                 fontWeight: 700,
               }}
             >
@@ -67,6 +67,10 @@ function NewsCard({
   variant: "featured" | "small";
 }) {
   const featured = variant === "featured";
+  const bg =
+    post.imageUrl
+      ? `url(${post.imageUrl})`
+      : NEWS_GRADIENTS[post._id.charCodeAt(0) % NEWS_GRADIENTS.length];
   return (
     <Link
       href={`#journal/${post.slug}`}
@@ -80,20 +84,28 @@ function NewsCard({
         className={`relative w-full overflow-hidden ${
           featured ? "aspect-[16/10] md:aspect-[4/3]" : "aspect-[16/9]"
         }`}
-        style={{
-          backgroundImage: post.imageUrl
-            ? `url(${post.imageUrl})`
-            : NEWS_GRADIENTS[post._id.charCodeAt(0) % NEWS_GRADIENTS.length],
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
       >
-        <span className="absolute left-5 top-5 rounded-full bg-paper/80 px-3 py-1 text-xs font-medium text-ink backdrop-blur">
+        <div
+          aria-hidden
+          className="absolute inset-0 group-hover:scale-105"
+          style={{
+            backgroundImage: bg,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            transition:
+              "transform var(--duration-deliberate) var(--ease-out-quint)",
+          }}
+        />
+        <span className="absolute left-5 top-5 rounded-full bg-paper/85 px-3 py-1 text-xs font-medium text-ink backdrop-blur">
           {post.category}
         </span>
       </div>
 
-      <div className={`flex flex-1 flex-col p-6 md:p-8 ${featured ? "md:p-10" : ""}`}>
+      <div
+        className={`flex flex-1 flex-col overflow-visible p-6 pb-7 md:p-8 md:pb-9 ${
+          featured ? "md:p-10 md:pb-11" : ""
+        }`}
+      >
         <time
           dateTime={post.publishedAt}
           className="text-xs font-medium uppercase tracking-[0.18em] text-muted"
@@ -101,7 +113,7 @@ function NewsCard({
           {formatDate(post.publishedAt)}
         </time>
         <h3
-          className={`mt-3 font-semibold tracking-tight text-ink ${
+          className={`mt-3 pb-1 font-semibold tracking-tight text-ink ${
             featured
               ? "text-3xl leading-[1.1] md:text-5xl"
               : "text-xl leading-tight md:text-2xl"
@@ -110,7 +122,7 @@ function NewsCard({
           {post.title}
         </h3>
         {featured && post.excerpt && (
-          <p className="mt-4 max-w-xl text-base leading-relaxed text-muted md:text-lg">
+          <p className="mt-4 max-w-xl pb-1 text-base leading-relaxed text-muted md:text-lg">
             {post.excerpt}
           </p>
         )}

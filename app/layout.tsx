@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { BackToTop } from "@/components/BackToTop";
+import { Cursor } from "@/components/Cursor";
 import { Navbar } from "@/components/Navbar";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import "./globals.css";
@@ -23,8 +25,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} antialiased`}>
+        <Cursor />
         <Navbar />
         {children}
+        <BackToTop />
         <WhatsAppButton />
       </body>
     </html>

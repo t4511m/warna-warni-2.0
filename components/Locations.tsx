@@ -167,15 +167,15 @@ function CityGrid() {
       {CITIES.map((c) => (
         <StaggerItem key={c.name} className="flex">
           <article
-            className="group relative flex w-full flex-col gap-1 overflow-hidden rounded-2xl bg-paper p-5 shadow-card hover:-translate-y-1 hover:shadow-card-hover"
+            className="group relative flex w-full flex-col gap-1 overflow-visible rounded-2xl bg-paper p-6 pb-7 shadow-card ring-0 ring-accent/0 hover:-translate-y-1 hover:shadow-card-hover hover:ring-2 hover:ring-accent/25"
             style={{
               transition:
-                "transform var(--duration-slow) var(--ease-out-quint), box-shadow var(--duration-slow) var(--ease-out-quint)",
+                "transform var(--duration-slow) var(--ease-out-quint), box-shadow var(--duration-slow) var(--ease-out-quint), --tw-ring-color var(--duration-base) var(--ease-out-quint)",
             }}
           >
             <span
               aria-hidden
-              className="absolute inset-x-0 top-0 h-1 origin-left scale-x-0 bg-accent group-hover:scale-x-100"
+              className="absolute inset-x-0 top-0 h-1 origin-left scale-x-0 rounded-t-2xl bg-accent group-hover:scale-x-100"
               style={{
                 transition:
                   "transform var(--duration-slow) var(--ease-out-quint)",
@@ -184,10 +184,10 @@ function CityGrid() {
             <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">
               {c.region}
             </p>
-            <p className="text-2xl font-semibold tracking-tight text-ink">
+            <p className="pb-0.5 text-2xl font-semibold tracking-tight text-ink">
               {c.name}
             </p>
-            <p className="mt-2 text-sm font-medium text-accent">
+            <p className="mt-2 pb-1 text-sm font-medium text-accent">
               {c.count} locations
             </p>
           </article>

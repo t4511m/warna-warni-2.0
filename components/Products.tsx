@@ -1,5 +1,6 @@
 import { Reveal } from "@/components/Reveal";
 import { Stagger, StaggerItem } from "@/components/Stagger";
+import { Tilt3D } from "@/components/Tilt3D";
 
 type Product = {
   slug: string;
@@ -79,7 +80,9 @@ export function Products() {
         >
           {PRODUCTS.map((p) => (
             <StaggerItem key={p.slug} className="flex">
-              <ProductCard product={p} />
+              <Tilt3D max={5} className="w-full">
+                <ProductCard product={p} />
+              </Tilt3D>
             </StaggerItem>
           ))}
         </Stagger>
@@ -91,17 +94,23 @@ export function Products() {
 function ProductCard({ product }: { product: Product }) {
   return (
     <article
-      className="group flex w-full flex-col overflow-hidden rounded-3xl bg-paper shadow-card hover:-translate-y-1 hover:shadow-card-hover"
+      className="group flex h-full w-full flex-col overflow-hidden rounded-3xl bg-paper shadow-card hover:shadow-card-hover"
       style={{
         transition:
-          "transform var(--duration-slow) var(--ease-out-quint), box-shadow var(--duration-slow) var(--ease-out-quint)",
+          "box-shadow var(--duration-slow) var(--ease-out-quint)",
       }}
     >
-      <div
-        className="relative aspect-[4/3] w-full overflow-hidden"
-        style={{ backgroundImage: product.gradient }}
-      >
-        <span className="absolute left-5 top-5 rounded-full bg-paper/80 px-3 py-1 text-xs font-medium text-ink backdrop-blur">
+      <div className="relative aspect-[4/3] w-full overflow-hidden">
+        <div
+          aria-hidden
+          className="absolute inset-0 group-hover:scale-105"
+          style={{
+            backgroundImage: product.gradient,
+            transition:
+              "transform var(--duration-deliberate) var(--ease-out-quint)",
+          }}
+        />
+        <span className="absolute left-5 top-5 rounded-full bg-paper/85 px-3 py-1 text-xs font-medium text-ink backdrop-blur">
           {product.tag}
         </span>
         <div
@@ -114,11 +123,13 @@ function ProductCard({ product }: { product: Product }) {
         />
       </div>
 
-      <div className="flex flex-1 flex-col gap-3 p-6 md:p-7">
-        <h3 className="text-2xl font-semibold tracking-tight text-ink md:text-[1.75rem]">
+      <div className="flex flex-1 flex-col gap-3 overflow-visible p-6 pb-7 md:p-7 md:pb-8">
+        <h3 className="pb-0.5 text-2xl font-semibold leading-tight tracking-tight text-ink md:text-[1.75rem]">
           {product.name}
         </h3>
-        <p className="text-base leading-relaxed text-muted">{product.blurb}</p>
+        <p className="pb-1 text-base leading-relaxed text-muted">
+          {product.blurb}
+        </p>
         <div className="mt-auto flex items-center gap-2 pt-4 text-sm font-medium text-ink">
           <span>Learn more</span>
           <span
@@ -149,22 +160,24 @@ function SectionHeader({
   id?: string;
 }) {
   return (
-    <div className="mx-auto max-w-3xl text-center">
+    <div className="mx-auto max-w-3xl pb-1 text-center">
       <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
         {label}
       </p>
       <h2
         id={id}
-        className="mt-4 font-semibold tracking-[-0.025em] text-ink"
+        className="mt-4 pb-1 font-semibold tracking-[-0.025em] text-ink"
         style={{
           fontSize: "clamp(2rem, 5vw, 3.75rem)",
-          lineHeight: 1.05,
+          lineHeight: 1.08,
           fontWeight: 700,
         }}
       >
         {title}
       </h2>
-      <p className="mt-5 text-base text-muted md:text-lg">{description}</p>
+      <p className="mt-5 pb-1 text-base leading-relaxed text-muted md:text-lg">
+        {description}
+      </p>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 
 type StaggerProps = {
   children: React.ReactNode;
@@ -33,11 +33,24 @@ export function Stagger({
   );
 }
 
-const itemVariants = {
+const itemVariantsFull = {
   hidden: { opacity: 0, y: 24 },
   show: {
     opacity: 1,
     y: 0,
+    transition: {
+      type: "spring" as const,
+      stiffness: 80,
+      damping: 18,
+      mass: 0.8,
+    },
+  },
+};
+
+const itemVariantsReduced = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
     transition: {
       type: "spring" as const,
       stiffness: 80,
@@ -54,8 +67,10 @@ type StaggerItemProps = {
 };
 
 export function StaggerItem({ children, className, style }: StaggerItemProps) {
+  const reduced = useReducedMotion();
+  const variants = reduced ? itemVariantsReduced : itemVariantsFull;
   return (
-    <motion.div className={className} style={style} variants={itemVariants}>
+    <motion.div className={className} style={style} variants={variants}>
       {children}
     </motion.div>
   );

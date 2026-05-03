@@ -56,13 +56,21 @@ export function Footer() {
                     <a
                       href={href}
                       aria-label={label}
-                      className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-paper/15 text-paper/70 hover:border-accent hover:text-accent"
+                      className="group inline-flex h-10 w-10 items-center justify-center rounded-full border border-paper/15 text-paper/70 hover:scale-110 hover:border-accent hover:text-accent"
                       style={{
                         transition:
-                          "color var(--duration-fast) var(--ease-out-quint), border-color var(--duration-fast) var(--ease-out-quint)",
+                          "color var(--duration-fast) var(--ease-out-quint), border-color var(--duration-fast) var(--ease-out-quint), transform var(--duration-base) var(--ease-out-quint)",
                       }}
                     >
-                      <Glyph />
+                      <span
+                        className="inline-block group-hover:rotate-12"
+                        style={{
+                          transition:
+                            "transform var(--duration-base) var(--ease-out-quint)",
+                        }}
+                      >
+                        <Glyph />
+                      </span>
                     </a>
                   </li>
                 ))}
@@ -152,12 +160,21 @@ function FooterColumn({
           <li key={l.label}>
             <Link
               href={l.href}
-              className="hover:text-accent"
+              className="group relative inline-block py-0.5 hover:text-accent"
               style={{
-                transition: "color var(--duration-fast) var(--ease-out-quint)",
+                transition:
+                  "color var(--duration-fast) var(--ease-out-quint)",
               }}
             >
-              {l.label}
+              <span>{l.label}</span>
+              <span
+                aria-hidden
+                className="absolute -bottom-px left-0 right-0 block h-px origin-left scale-x-0 bg-accent group-hover:scale-x-100"
+                style={{
+                  transition:
+                    "transform var(--duration-base) var(--ease-out-quint)",
+                }}
+              />
             </Link>
           </li>
         ))}
