@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Reveal } from "@/components/Reveal";
 
 const PRODUCT_OPTIONS = [
   { value: "", label: "Select format" },
@@ -102,149 +103,141 @@ export function CTASection() {
   const fieldErrors = status.kind === "error" ? status.fieldErrors : undefined;
 
   return (
-    <section className="relative bg-steel text-paper" id="contact">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-70"
-        style={{
-          backgroundImage:
-            "radial-gradient(60% 40% at 20% 0%, rgb(232 50 10 / 0.25), transparent 60%), radial-gradient(40% 50% at 100% 100%, rgb(245 166 35 / 0.18), transparent 60%)",
-        }}
-      />
-
-      <div className="relative mx-auto grid max-w-7xl gap-12 px-4 py-20 md:grid-cols-2 md:gap-16 md:px-10 md:py-28 lg:px-16">
-        <div className="flex flex-col justify-between gap-12">
-          <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-paper/60">
-              <span className="mr-3 inline-block h-px w-8 align-middle bg-paper/40" />
-              Get in touch
-            </p>
-            <h2
-              className="mt-6 font-display tracking-[-0.02em] text-paper"
-              style={{
-                fontWeight: 800,
-                fontSize: "clamp(2.5rem, 6vw, 5rem)",
-                lineHeight: 1.02,
-              }}
-            >
-              Ready to be seen by
-              <br />
-              <em className="italic text-accent">millions?</em>
-            </h2>
-            <p className="mt-6 max-w-md text-base text-paper/70 md:text-lg">
-              Tell us about your campaign — we&apos;ll come back within one
-              business day with a tailored proposal.
-            </p>
-          </div>
-
-          <ul className="space-y-4 text-sm text-paper/80">
-            <ContactRow
-              label="Email"
-              value="hello@warna-warni.id"
-              href="mailto:hello@warna-warni.id"
-            />
-            <ContactRow
-              label="Phone"
-              value="+62 21 5555 0123"
-              href="tel:+622155550123"
-            />
-            <ContactRow
-              label="WhatsApp"
-              value="+62 812 3456 7890"
-              href="https://wa.me/6281234567890"
-            />
-            <ContactRow
-              label="Office"
-              value="Jl. Jend. Sudirman Kav. 52-53, Jakarta 12190"
-            />
-          </ul>
-        </div>
-
-        <form
-          onSubmit={onSubmit}
-          noValidate
-          className="relative rounded-2xl border border-paper/15 bg-paper/[0.04] p-6 shadow-xl backdrop-blur-xl md:p-8"
-        >
-          <fieldset disabled={submitting} className="contents">
-            <div className="grid gap-4 md:grid-cols-2">
-              <Field
-                label="Name"
-                name="name"
-                required
-                value={form.name}
-                onChange={(v) => update("name", v)}
-                error={fieldErrors?.name}
-              />
-              <Field
-                label="Company"
-                name="company"
-                value={form.company}
-                onChange={(v) => update("company", v)}
-              />
-              <Field
-                label="Email"
-                name="email"
-                type="email"
-                required
-                value={form.email}
-                onChange={(v) => update("email", v)}
-                error={fieldErrors?.email}
-              />
-              <Field
-                label="Phone"
-                name="phone"
-                type="tel"
-                value={form.phone}
-                onChange={(v) => update("phone", v)}
-              />
-              <Select
-                label="Product type"
-                name="product"
-                value={form.product}
-                onChange={(v) => update("product", v)}
-                options={PRODUCT_OPTIONS}
-              />
-              <Select
-                label="City"
-                name="city"
-                value={form.city}
-                onChange={(v) => update("city", v)}
-                options={CITY_OPTIONS}
-              />
-              <div className="md:col-span-2">
-                <Select
-                  label="Budget"
-                  name="budget"
-                  value={form.budget}
-                  onChange={(v) => update("budget", v)}
-                  options={BUDGET_OPTIONS}
-                />
-              </div>
+    <section className="bg-mist text-ink" id="contact">
+      <div className="mx-auto grid max-w-7xl gap-12 px-6 py-24 md:grid-cols-2 md:gap-16 md:px-10 md:py-32 lg:px-12">
+        <Reveal>
+          <div className="flex flex-col gap-10">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
+                Get in touch
+              </p>
+              <h2
+                className="mt-4 font-semibold tracking-[-0.025em] text-ink"
+                style={{
+                  fontSize: "clamp(2.25rem, 5vw, 4rem)",
+                  lineHeight: 1.05,
+                  fontWeight: 700,
+                }}
+              >
+                Ready to be seen by{" "}
+                <span className="text-accent">millions?</span>
+              </h2>
+              <p className="mt-5 max-w-md text-base text-muted md:text-lg">
+                Tell us about your campaign — we&apos;ll come back within one
+                business day with a tailored proposal.
+              </p>
             </div>
 
-            <button
-              type="submit"
-              className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-accent px-6 py-3 text-sm font-medium text-paper hover:-translate-y-px hover:shadow-glow disabled:cursor-not-allowed disabled:opacity-60"
-              style={{
-                transition:
-                  "transform var(--duration-fast) var(--ease-out-quint), box-shadow var(--duration-base) var(--ease-out-quint)",
-              }}
-            >
-              {submitting ? "Sending…" : "Send proposal request"}
-              <Arrow />
-            </button>
+            <ul className="flex flex-col gap-4">
+              <ContactRow
+                label="Email"
+                value="hello@ww-demo.id"
+                href="mailto:hello@ww-demo.id"
+              />
+              <ContactRow
+                label="Phone"
+                value="+62 21 5555 0123"
+                href="tel:+622155550123"
+              />
+              <ContactRow
+                label="WhatsApp"
+                value="+62 812 3456 7890"
+                href="https://wa.me/6281234567890"
+              />
+              <ContactRow
+                label="Office"
+                value="Jl. Jend. Sudirman Kav. 52-53, Jakarta 12190"
+              />
+            </ul>
+          </div>
+        </Reveal>
 
-            {status.kind === "success" && (
-              <p className="mt-4 text-sm text-accent-warm">
-                Thanks — your request is in. We&apos;ll be in touch within a
-                business day.
-              </p>
-            )}
-            {status.kind === "error" && (
-              <p className="mt-4 text-sm text-accent">{status.message}</p>
-            )}
-          </fieldset>
-        </form>
+        <Reveal delay={0.1}>
+          <form
+            onSubmit={onSubmit}
+            noValidate
+            className="rounded-3xl bg-paper p-6 shadow-card md:p-8"
+          >
+            <fieldset disabled={submitting} className="contents">
+              <div className="grid gap-4 md:grid-cols-2">
+                <Field
+                  label="Name"
+                  name="name"
+                  required
+                  value={form.name}
+                  onChange={(v) => update("name", v)}
+                  error={fieldErrors?.name}
+                />
+                <Field
+                  label="Company"
+                  name="company"
+                  value={form.company}
+                  onChange={(v) => update("company", v)}
+                />
+                <Field
+                  label="Email"
+                  name="email"
+                  type="email"
+                  required
+                  value={form.email}
+                  onChange={(v) => update("email", v)}
+                  error={fieldErrors?.email}
+                />
+                <Field
+                  label="Phone"
+                  name="phone"
+                  type="tel"
+                  value={form.phone}
+                  onChange={(v) => update("phone", v)}
+                />
+                <Select
+                  label="Product type"
+                  name="product"
+                  value={form.product}
+                  onChange={(v) => update("product", v)}
+                  options={PRODUCT_OPTIONS}
+                />
+                <Select
+                  label="City"
+                  name="city"
+                  value={form.city}
+                  onChange={(v) => update("city", v)}
+                  options={CITY_OPTIONS}
+                />
+                <div className="md:col-span-2">
+                  <Select
+                    label="Budget"
+                    name="budget"
+                    value={form.budget}
+                    onChange={(v) => update("budget", v)}
+                    options={BUDGET_OPTIONS}
+                  />
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-ink px-7 py-3.5 text-base font-medium text-paper hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-60"
+                style={{
+                  transition:
+                    "transform var(--duration-base) var(--ease-out-quint)",
+                }}
+              >
+                {submitting ? "Sending…" : "Send proposal request"}
+              </button>
+
+              {status.kind === "success" && (
+                <p className="mt-4 text-sm font-medium text-ink">
+                  Thanks — your request is in. We&apos;ll be in touch within a
+                  business day.
+                </p>
+              )}
+              {status.kind === "error" && (
+                <p className="mt-4 text-sm text-accent">{status.message}</p>
+              )}
+            </fieldset>
+          </form>
+        </Reveal>
       </div>
     </section>
   );
@@ -260,11 +253,11 @@ function ContactRow({
   href?: string;
 }) {
   const inner = (
-    <div className="flex items-baseline gap-4 border-b border-paper/10 py-3">
-      <span className="w-24 shrink-0 font-mono text-[10px] uppercase tracking-[0.24em] text-paper/45">
+    <div className="flex items-baseline gap-4 border-b border-ink/8 py-3">
+      <span className="w-24 shrink-0 text-xs font-medium uppercase tracking-[0.18em] text-muted">
         {label}
       </span>
-      <span className="font-display text-lg leading-tight text-paper">
+      <span className="text-base font-medium text-ink md:text-lg">
         {value}
       </span>
     </div>
@@ -305,7 +298,7 @@ function Field({
 }) {
   return (
     <label className="flex flex-col gap-1.5 text-sm">
-      <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-paper/55">
+      <span className="text-xs font-medium uppercase tracking-[0.16em] text-muted">
         {label}
         {required && <span className="text-accent"> *</span>}
       </span>
@@ -315,10 +308,10 @@ function Field({
         required={required}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="rounded-md border border-paper/15 bg-paper/[0.03] px-3 py-2.5 text-paper placeholder:text-paper/40 focus:border-accent focus:bg-paper/[0.06] focus:outline-none"
+        className="rounded-xl border border-ink/10 bg-paper px-4 py-3 text-base text-ink placeholder:text-muted focus:border-accent focus:outline-none focus:ring-4 focus:ring-accent/10"
         style={{
           transition:
-            "border-color var(--duration-fast) var(--ease-out-quint), background-color var(--duration-fast) var(--ease-out-quint)",
+            "border-color var(--duration-fast) var(--ease-out-quint), box-shadow var(--duration-fast) var(--ease-out-quint)",
         }}
       />
       {error && <span className="text-xs text-accent">{error}</span>}
@@ -341,51 +334,30 @@ function Select({
 }) {
   return (
     <label className="flex flex-col gap-1.5 text-sm">
-      <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-paper/55">
+      <span className="text-xs font-medium uppercase tracking-[0.16em] text-muted">
         {label}
       </span>
       <select
         name={name}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="appearance-none rounded-md border border-paper/15 bg-paper/[0.03] px-3 py-2.5 text-paper focus:border-accent focus:bg-paper/[0.06] focus:outline-none"
+        className="appearance-none rounded-xl border border-ink/10 bg-paper px-4 py-3 text-base text-ink focus:border-accent focus:outline-none focus:ring-4 focus:ring-accent/10"
         style={{
           backgroundImage:
-            "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none'><path d='M3 5l3 3 3-3' stroke='%23F5F2EC' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/></svg>\")",
+            "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none'><path d='M3 5l3 3 3-3' stroke='%231D1D1F' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/></svg>\")",
           backgroundRepeat: "no-repeat",
-          backgroundPosition: "right 12px center",
-          paddingRight: "2.25rem",
+          backgroundPosition: "right 14px center",
+          paddingRight: "2.5rem",
           transition:
-            "border-color var(--duration-fast) var(--ease-out-quint), background-color var(--duration-fast) var(--ease-out-quint)",
+            "border-color var(--duration-fast) var(--ease-out-quint), box-shadow var(--duration-fast) var(--ease-out-quint)",
         }}
       >
         {options.map((o) => (
-          <option key={o.value} value={o.value} className="bg-steel text-paper">
+          <option key={o.value} value={o.value} className="bg-paper text-ink">
             {o.label}
           </option>
         ))}
       </select>
     </label>
-  );
-}
-
-function Arrow() {
-  return (
-    <svg
-      width="14"
-      height="14"
-      viewBox="0 0 14 14"
-      fill="none"
-      aria-hidden
-      className="shrink-0"
-    >
-      <path
-        d="M2 7h10M8 3l4 4-4 4"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
   );
 }

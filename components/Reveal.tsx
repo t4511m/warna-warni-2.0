@@ -2,8 +2,6 @@
 
 import { motion } from "framer-motion";
 
-const EASE_OUT_QUINT = [0.22, 1, 0.36, 1] as const;
-
 type RevealProps = {
   children: React.ReactNode;
   className?: string;
@@ -23,7 +21,13 @@ export function Reveal({
       initial={{ opacity: 0, y }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-15%" }}
-      transition={{ duration: 0.65, ease: EASE_OUT_QUINT, delay }}
+      transition={{
+        type: "spring",
+        stiffness: 80,
+        damping: 18,
+        mass: 0.8,
+        delay,
+      }}
     >
       {children}
     </motion.div>

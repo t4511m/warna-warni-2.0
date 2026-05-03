@@ -4,20 +4,20 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const NAV_LINKS = [
-  { href: "#work", label: "Work" },
-  { href: "#about", label: "About" },
+  { href: "#inventory", label: "Inventory" },
+  { href: "#solutions", label: "Solutions" },
+  { href: "#locations", label: "Locations" },
   { href: "#journal", label: "Journal" },
-  { href: "#contact", label: "Contact" },
 ] as const;
 
-const CTA = { href: "#contact", label: "Start a project" } as const;
+const CTA = { href: "#contact", label: "Talk to us" } as const;
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 50);
+    const onScroll = () => setScrolled(window.scrollY > 24);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -41,29 +41,32 @@ export function Navbar() {
     <>
       <header
         data-scrolled={scrolled}
-        className="fixed inset-x-0 top-0 z-40 animate-nav-fade border-b border-transparent backdrop-blur-sm data-[scrolled=true]:border-ink/10 data-[scrolled=true]:bg-paper/85 data-[scrolled=true]:backdrop-blur-xl data-[scrolled=true]:shadow-[0_1px_0_0_rgb(10_10_10/0.04),0_10px_30px_-14px_rgb(10_10_10/0.18)]"
+        className="fixed inset-x-0 top-0 z-40 animate-nav-fade backdrop-blur-md bg-paper/70 data-[scrolled=true]:bg-paper/85 data-[scrolled=true]:backdrop-blur-xl data-[scrolled=true]:shadow-[0_1px_0_0_rgb(0_0_0/0.04),0_10px_30px_-14px_rgb(0_0_0/0.12)]"
         style={{
           transitionProperty:
-            "background-color, backdrop-filter, border-color, box-shadow",
+            "background-color, backdrop-filter, box-shadow",
           transitionDuration: "var(--duration-base)",
           transitionTimingFunction: "var(--ease-out-quint)",
         }}
       >
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-3 py-2 md:px-6 md:py-3">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-3 md:px-8 md:py-4">
           <Link
             href="/"
             aria-label="WW Demo — home"
-            className="font-display text-2xl leading-none tracking-tight text-ink md:text-[28px]"
+            className="text-lg font-bold tracking-tight text-ink md:text-xl"
           >
             WW Demo
           </Link>
 
-          <nav aria-label="Primary" className="hidden items-center gap-7 md:flex">
+          <nav
+            aria-label="Primary"
+            className="hidden items-center gap-8 md:flex"
+          >
             {NAV_LINKS.map((l) => (
               <Link
                 key={l.href}
                 href={l.href}
-                className="group relative text-sm text-ink/80 hover:text-ink"
+                className="group relative text-sm font-medium text-ink/85 hover:text-ink"
                 style={{
                   transition:
                     "color var(--duration-fast) var(--ease-out-quint)",
@@ -82,10 +85,10 @@ export function Navbar() {
             ))}
             <Link
               href={CTA.href}
-              className="rounded-full bg-accent px-4 py-2 text-sm font-medium text-paper hover:-translate-y-px hover:shadow-glow"
+              className="rounded-full bg-ink px-5 py-2 text-sm font-medium text-paper hover:scale-[1.04]"
               style={{
                 transition:
-                  "transform var(--duration-fast) var(--ease-out-quint), box-shadow var(--duration-base) var(--ease-out-quint)",
+                  "transform var(--duration-fast) var(--ease-out-quint)",
               }}
             >
               {CTA.label}
@@ -105,7 +108,7 @@ export function Navbar() {
         </div>
       </header>
 
-      <MobilePanel open={open} onClose={() => setOpen(false)} />
+      <MobileDropdown open={open} onClose={() => setOpen(false)} />
     </>
   );
 }
@@ -136,7 +139,7 @@ function Burger({ open }: { open: boolean }) {
   );
 }
 
-function MobilePanel({
+function MobileDropdown({
   open,
   onClose,
 }: {
@@ -148,45 +151,37 @@ function MobilePanel({
       <div
         aria-hidden
         onClick={onClose}
-        className={`fixed inset-0 z-40 bg-ink/30 backdrop-blur-sm ${
-          open ? "opacity-100" : "pointer-events-none opacity-0"
-        }`}
+        className="fixed inset-0 z-20"
         style={{
-          transition: "opacity var(--duration-base) var(--ease-out-quint)",
+          pointerEvents: open ? "auto" : "none",
+          backgroundColor: open ? "rgb(0 0 0 / 0.18)" : "transparent",
+          transition:
+            "background-color var(--duration-base) var(--ease-out-quint)",
         }}
       />
+
       <aside
         role="dialog"
         aria-label="Mobile navigation"
         aria-hidden={!open}
-        className="fixed inset-y-0 right-0 z-50 flex w-[82%] max-w-sm flex-col gap-8 bg-paper p-6 shadow-xl"
+        className="fixed inset-x-0 top-0 z-30 bg-paper/95 backdrop-blur-xl"
         style={{
-          transform: open ? "translateX(0)" : "translateX(100%)",
-          transition: "transform var(--duration-slow) var(--ease-out-quint)",
+          transform: open ? "translateY(0)" : "translateY(-100%)",
+          transition:
+            "transform var(--duration-slow) var(--ease-out-quint), box-shadow var(--duration-slow) var(--ease-out-quint)",
+          boxShadow: open
+            ? "0 24px 48px -16px rgb(0 0 0 / 0.16)"
+            : "none",
         }}
       >
-        <div className="flex items-center justify-between">
-          <span className="font-display text-2xl tracking-tight text-ink">
-            WW Demo
-          </span>
-          <button
-            type="button"
-            aria-label="Close menu"
-            onClick={onClose}
-            className="-mr-1 inline-flex h-10 w-10 items-center justify-center text-ink"
-          >
-            <Burger open />
-          </button>
-        </div>
-
-        <nav aria-label="Mobile" className="flex flex-col gap-1">
+        <div className="flex flex-col gap-1 px-6 pb-8 pt-20">
           {NAV_LINKS.map((l) => (
             <Link
               key={l.href}
               href={l.href}
               onClick={onClose}
               tabIndex={open ? 0 : -1}
-              className="font-display text-3xl text-ink hover:text-accent"
+              className="py-2 text-2xl font-semibold tracking-tight text-ink hover:text-accent"
               style={{
                 transition: "color var(--duration-fast) var(--ease-out-quint)",
               }}
@@ -194,19 +189,18 @@ function MobilePanel({
               {l.label}
             </Link>
           ))}
-        </nav>
-
-        <Link
-          href={CTA.href}
-          onClick={onClose}
-          tabIndex={open ? 0 : -1}
-          className="mt-auto inline-flex items-center justify-center rounded-full bg-accent px-5 py-3 text-base font-medium text-paper shadow-sm hover:shadow-glow"
-          style={{
-            transition: "box-shadow var(--duration-base) var(--ease-out-quint)",
-          }}
-        >
-          {CTA.label}
-        </Link>
+          <Link
+            href={CTA.href}
+            onClick={onClose}
+            tabIndex={open ? 0 : -1}
+            className="mt-6 inline-flex items-center justify-center rounded-full bg-ink px-6 py-3.5 text-base font-medium text-paper hover:scale-[1.02]"
+            style={{
+              transition: "transform var(--duration-base) var(--ease-out-quint)",
+            }}
+          >
+            {CTA.label}
+          </Link>
+        </div>
       </aside>
     </div>
   );

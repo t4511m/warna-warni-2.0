@@ -1,12 +1,8 @@
 "use client";
 
-import {
-  motion,
-  useInView,
-  useSpring,
-  useTransform,
-} from "framer-motion";
+import { motion, useInView, useSpring, useTransform } from "framer-motion";
 import { useEffect, useRef } from "react";
+import { Reveal } from "@/components/Reveal";
 
 type Stat = {
   value: number;
@@ -29,20 +25,32 @@ export function Stats() {
     <section
       ref={ref}
       aria-label="By the numbers"
-      className="relative bg-ink text-paper"
+      className="bg-mist text-ink"
     >
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-60"
-        style={{
-          backgroundImage:
-            "radial-gradient(60% 60% at 50% 0%, rgb(232 50 10 / 0.18), transparent 70%)",
-        }}
-      />
-      <div className="relative mx-auto grid max-w-7xl grid-cols-2 gap-y-10 px-4 py-16 md:grid-cols-4 md:gap-x-6 md:px-10 md:py-20 lg:px-16">
-        {STATS.map((s, i) => (
-          <Counter key={s.label} stat={s} index={i} inView={inView} />
-        ))}
+      <div className="mx-auto max-w-7xl px-6 py-24 md:px-10 md:py-32 lg:px-12">
+        <Reveal>
+          <div className="mx-auto max-w-3xl text-center">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
+              By the numbers
+            </p>
+            <h2
+              className="mt-4 font-semibold tracking-[-0.025em] text-ink"
+              style={{
+                fontSize: "clamp(2rem, 5vw, 3.75rem)",
+                lineHeight: 1.05,
+                fontWeight: 700,
+              }}
+            >
+              Trusted scale, proven reach.
+            </h2>
+          </div>
+        </Reveal>
+
+        <div className="mt-16 grid grid-cols-2 gap-y-12 md:mt-20 md:grid-cols-4 md:gap-x-6">
+          {STATS.map((s, i) => (
+            <Counter key={s.label} stat={s} index={i} inView={inView} />
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -72,19 +80,25 @@ function Counter({
   }, [inView, spring, stat.value, index]);
 
   return (
-    <div className="relative flex flex-col gap-2 md:border-l md:border-paper/10 md:pl-6 md:first:border-l-0 md:first:pl-0">
-      <div className="flex items-baseline gap-1 font-display leading-none">
+    <div className="flex flex-col items-center text-center">
+      <div className="flex items-baseline gap-1 leading-none">
         <motion.span
-          className="text-5xl tracking-[-0.02em] md:text-6xl lg:text-7xl"
-          style={{ fontWeight: 700 }}
+          className="font-semibold tracking-[-0.03em] text-ink"
+          style={{
+            fontSize: "clamp(2.75rem, 6vw, 4.5rem)",
+            fontVariantNumeric: "tabular-nums",
+            fontWeight: 700,
+          }}
         >
           {display}
         </motion.span>
         {stat.plus && (
-          <span className="text-3xl text-accent md:text-4xl">+</span>
+          <span className="text-3xl font-medium text-accent md:text-4xl">
+            +
+          </span>
         )}
       </div>
-      <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-paper/60">
+      <p className="mt-4 text-sm font-medium text-muted md:text-base">
         {stat.label}
       </p>
     </div>

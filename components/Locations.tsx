@@ -26,27 +26,25 @@ const TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 
 export function Locations() {
   return (
-    <section className="relative bg-ink text-paper" id="locations">
-      <div className="mx-auto max-w-7xl px-4 py-20 md:px-10 md:py-28 lg:px-16">
+    <section className="bg-mist text-ink" id="locations">
+      <div className="mx-auto max-w-7xl px-6 py-24 md:px-10 md:py-32 lg:px-12">
         <Reveal>
-          <div className="grid gap-6 md:grid-cols-12 md:gap-10">
-            <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-paper/60 md:col-span-3">
-              <span className="mr-3 inline-block h-px w-8 align-middle bg-paper/40" />
+          <div className="mx-auto max-w-3xl text-center">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
               Locations
             </p>
             <h2
-              className="font-display tracking-[-0.02em] text-paper md:col-span-9"
+              className="mt-4 font-semibold tracking-[-0.025em] text-ink"
               style={{
-                fontWeight: 800,
-                fontSize: "clamp(2.25rem, 5vw, 4.5rem)",
-                lineHeight: 1.02,
+                fontSize: "clamp(2rem, 5vw, 3.75rem)",
+                lineHeight: 1.05,
+                fontWeight: 700,
               }}
             >
-              From Sumatera to
-              <br />
-              <em className="italic text-accent">Sulawesi.</em>
+              From Sumatera to{" "}
+              <span className="text-muted">Sulawesi.</span>
             </h2>
-            <p className="max-w-2xl text-base text-paper/70 md:col-span-9 md:col-start-4 md:text-lg">
+            <p className="mt-5 text-base text-muted md:text-lg">
               A live map of the cities we operate in — billboards, videotrons,
               neonbox, and pedestrian bridges across six metros.
             </p>
@@ -58,6 +56,7 @@ export function Locations() {
             <MapView />
           </div>
         </Reveal>
+
         <CityGrid />
       </div>
     </section>
@@ -120,11 +119,11 @@ function MapView() {
   }, []);
 
   return (
-    <div className="relative overflow-hidden rounded-xl border border-paper/10 bg-steel">
+    <div className="relative overflow-hidden rounded-3xl bg-ink shadow-card">
       <div
         ref={containerRef}
         className="h-[420px] w-full md:h-[560px] lg:h-[640px]"
-        aria-label="Map of warna-warni locations across Indonesia"
+        aria-label="Map of locations across Indonesia"
       />
       {!TOKEN && <MapFallback />}
     </div>
@@ -133,23 +132,24 @@ function MapView() {
 
 function MapFallback() {
   return (
-    <div className="absolute inset-0 flex items-center justify-center p-8">
+    <div className="absolute inset-0 flex items-center justify-center bg-ink p-8 text-paper">
       <div
         aria-hidden
         className="absolute inset-0"
         style={{
           backgroundImage:
-            "radial-gradient(60% 50% at 50% 40%, rgb(232 50 10 / 0.25), transparent 70%), radial-gradient(50% 50% at 80% 80%, rgb(245 166 35 / 0.15), transparent 70%)",
+            "radial-gradient(60% 50% at 50% 40%, rgb(232 50 10 / 0.18), transparent 70%)",
         }}
       />
       <div className="relative max-w-md text-center">
-        <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-paper/55">
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
           Map unavailable
         </p>
-        <p className="mt-3 font-display text-2xl text-paper md:text-3xl">
-          Set <code className="font-mono text-accent">NEXT_PUBLIC_MAPBOX_TOKEN</code> to enable the live map.
+        <p className="mt-3 text-2xl font-semibold tracking-tight text-paper md:text-3xl">
+          Set <code className="text-accent">NEXT_PUBLIC_MAPBOX_TOKEN</code> to
+          enable the live map.
         </p>
-        <p className="mt-3 text-sm text-paper/60">
+        <p className="mt-3 text-sm text-paper/70">
           Six cities, 1000+ locations across Indonesia — Jakarta, Surabaya,
           Bandung, Bali, Medan, Makassar.
         </p>
@@ -162,29 +162,35 @@ function CityGrid() {
   return (
     <Stagger
       stagger={0.05}
-      className="mt-6 grid grid-cols-2 gap-px overflow-hidden rounded-xl bg-paper/10 md:grid-cols-6"
+      className="mt-8 grid grid-cols-2 gap-3 md:mt-10 md:grid-cols-3 md:gap-5 lg:grid-cols-6"
     >
       {CITIES.map((c) => (
-        <StaggerItem
-          key={c.name}
-          className="group relative flex flex-col gap-1 bg-ink p-5"
-        >
-          <span
-            aria-hidden
-            className="absolute inset-x-0 top-0 h-px origin-left scale-x-0 bg-accent group-hover:scale-x-100"
+        <StaggerItem key={c.name} className="flex">
+          <article
+            className="group relative flex w-full flex-col gap-1 overflow-hidden rounded-2xl bg-paper p-5 shadow-card hover:-translate-y-1 hover:shadow-card-hover"
             style={{
-              transition: "transform var(--duration-slow) var(--ease-out-quint)",
+              transition:
+                "transform var(--duration-slow) var(--ease-out-quint), box-shadow var(--duration-slow) var(--ease-out-quint)",
             }}
-          />
-          <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-paper/45">
-            {c.region}
-          </p>
-          <p className="font-display text-2xl leading-none tracking-tight text-paper">
-            {c.name}
-          </p>
-          <p className="mt-2 font-mono text-xs tracking-wider text-accent">
-            {c.count} locations
-          </p>
+          >
+            <span
+              aria-hidden
+              className="absolute inset-x-0 top-0 h-1 origin-left scale-x-0 bg-accent group-hover:scale-x-100"
+              style={{
+                transition:
+                  "transform var(--duration-slow) var(--ease-out-quint)",
+              }}
+            />
+            <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">
+              {c.region}
+            </p>
+            <p className="text-2xl font-semibold tracking-tight text-ink">
+              {c.name}
+            </p>
+            <p className="mt-2 text-sm font-medium text-accent">
+              {c.count} locations
+            </p>
+          </article>
         </StaggerItem>
       ))}
     </Stagger>

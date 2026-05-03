@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { getNews, type NewsPost } from "@/lib/sanity";
+import { Reveal } from "@/components/Reveal";
+import { Stagger, StaggerItem } from "@/components/Stagger";
 
 export async function News() {
   const { posts, source } = await getNews();
@@ -8,51 +10,50 @@ export async function News() {
 
   return (
     <section className="bg-paper text-ink" id="journal">
-      <div className="mx-auto max-w-7xl px-4 py-20 md:px-10 md:py-28 lg:px-16">
-        <div className="flex items-end justify-between gap-6">
-          <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-ink/60">
-              <span className="mr-3 inline-block h-px w-8 align-middle bg-ink/40" />
+      <div className="mx-auto max-w-7xl px-6 py-24 md:px-10 md:py-32 lg:px-12">
+        <Reveal>
+          <div className="mx-auto max-w-3xl text-center">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
               Journal
             </p>
             <h2
-              className="mt-6 font-display tracking-[-0.02em] text-ink"
+              className="mt-4 font-semibold tracking-[-0.025em] text-ink"
               style={{
-                fontWeight: 800,
-                fontSize: "clamp(2.25rem, 5vw, 4.5rem)",
-                lineHeight: 1.02,
+                fontSize: "clamp(2rem, 5vw, 3.75rem)",
+                lineHeight: 1.05,
+                fontWeight: 700,
               }}
             >
-              Latest from
-              <br />
-              <em className="italic text-accent">the network.</em>
+              Latest from{" "}
+              <span className="text-muted">the network.</span>
             </h2>
+            {source === "fallback" && (
+              <p className="mt-3 text-xs uppercase tracking-[0.18em] text-muted">
+                {/* TODO: configure NEXT_PUBLIC_SANITY_PROJECT_ID for real posts */}
+                Sample posts — Sanity not yet configured
+              </p>
+            )}
           </div>
-          <Link
-            href="#journal"
-            className="hidden shrink-0 items-center gap-2 rounded-full border border-ink/20 px-4 py-2 text-sm text-ink hover:border-ink hover:bg-ink hover:text-paper md:inline-flex"
-            style={{
-              transition:
-                "background-color var(--duration-base) var(--ease-out-quint), color var(--duration-base) var(--ease-out-quint), border-color var(--duration-base) var(--ease-out-quint)",
-            }}
-          >
-            All posts
-            <Arrow />
-          </Link>
-        </div>
+        </Reveal>
 
-        {source === "fallback" && (
-          <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.2em] text-ink/40">
-            {/* TODO: configure NEXT_PUBLIC_SANITY_PROJECT_ID to load real posts */}
-            Sample posts — Sanity not yet configured.
-          </p>
-        )}
-
-        <div className="mt-12 grid grid-cols-1 gap-4 md:mt-16 md:grid-cols-3 md:grid-rows-2 md:gap-5">
-          <NewsCard post={featured} variant="featured" />
-          {second && <NewsCard post={second} variant="small" />}
-          {third && <NewsCard post={third} variant="small" />}
-        </div>
+        <Stagger
+          stagger={0.08}
+          className="mt-14 grid grid-cols-1 gap-5 md:mt-20 md:grid-cols-3 md:gap-6"
+        >
+          <StaggerItem className="md:col-span-2 md:row-span-2">
+            <NewsCard post={featured} variant="featured" />
+          </StaggerItem>
+          {second && (
+            <StaggerItem>
+              <NewsCard post={second} variant="small" />
+            </StaggerItem>
+          )}
+          {third && (
+            <StaggerItem>
+              <NewsCard post={third} variant="small" />
+            </StaggerItem>
+          )}
+        </Stagger>
       </div>
     </section>
   );
@@ -69,78 +70,75 @@ function NewsCard({
   return (
     <Link
       href={`#journal/${post.slug}`}
-      className={`group relative flex flex-col overflow-hidden rounded-xl bg-steel text-paper ${
-        featured ? "md:col-span-2 md:row-span-2" : ""
-      }`}
+      className="group flex h-full w-full flex-col overflow-hidden rounded-3xl bg-mist shadow-card hover:-translate-y-1 hover:shadow-card-hover"
+      style={{
+        transition:
+          "transform var(--duration-slow) var(--ease-out-quint), box-shadow var(--duration-slow) var(--ease-out-quint)",
+      }}
     >
       <div
-        aria-hidden
-        className="absolute inset-0"
+        className={`relative w-full overflow-hidden ${
+          featured ? "aspect-[16/10] md:aspect-[4/3]" : "aspect-[16/9]"
+        }`}
         style={{
           backgroundImage: post.imageUrl
             ? `url(${post.imageUrl})`
-            : "radial-gradient(60% 70% at 70% 20%, rgb(232 50 10 / 0.55), transparent 65%), radial-gradient(50% 60% at 20% 90%, rgb(245 166 35 / 0.25), transparent 60%)",
+            : NEWS_GRADIENTS[post._id.charCodeAt(0) % NEWS_GRADIENTS.length],
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
-      />
-      <div
-        aria-hidden
-        className="absolute inset-0"
-        style={{
-          backgroundImage:
-            "linear-gradient(to top, rgb(10 10 10 / 0.85) 0%, rgb(10 10 10 / 0.4) 50%, transparent 80%)",
-        }}
-      />
-      <div
-        aria-hidden
-        className="absolute inset-0 opacity-30 mix-blend-overlay"
-        style={{
-          backgroundImage:
-            "linear-gradient(to right, rgb(245 242 236 / 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgb(245 242 236 / 0.05) 1px, transparent 1px)",
-          backgroundSize: "32px 32px",
-        }}
-      />
-
-      <div
-        className={`relative z-10 flex h-full flex-col justify-end p-6 ${
-          featured ? "md:p-10" : ""
-        }`}
-        style={{ minHeight: featured ? 480 : 240 }}
       >
-        <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.24em] text-paper/60">
-          <span>{post.category}</span>
-          <span aria-hidden>·</span>
-          <time dateTime={post.publishedAt}>
-            {formatDate(post.publishedAt)}
-          </time>
-        </div>
+        <span className="absolute left-5 top-5 rounded-full bg-paper/80 px-3 py-1 text-xs font-medium text-ink backdrop-blur">
+          {post.category}
+        </span>
+      </div>
+
+      <div className={`flex flex-1 flex-col p-6 md:p-8 ${featured ? "md:p-10" : ""}`}>
+        <time
+          dateTime={post.publishedAt}
+          className="text-xs font-medium uppercase tracking-[0.18em] text-muted"
+        >
+          {formatDate(post.publishedAt)}
+        </time>
         <h3
-          className={`mt-4 font-display leading-[1.05] tracking-tight text-paper ${
-            featured ? "text-4xl md:text-6xl" : "text-2xl md:text-3xl"
+          className={`mt-3 font-semibold tracking-tight text-ink ${
+            featured
+              ? "text-3xl leading-[1.1] md:text-5xl"
+              : "text-xl leading-tight md:text-2xl"
           }`}
         >
           {post.title}
         </h3>
         {featured && post.excerpt && (
-          <p className="mt-4 max-w-xl text-base text-paper/75">
+          <p className="mt-4 max-w-xl text-base leading-relaxed text-muted md:text-lg">
             {post.excerpt}
           </p>
         )}
-
-        <span
-          className="mt-6 inline-flex h-10 w-10 items-center justify-center rounded-full border border-paper/30 text-paper group-hover:translate-x-1 group-hover:border-accent group-hover:bg-accent"
-          style={{
-            transition:
-              "transform var(--duration-base) var(--ease-out-quint), background-color var(--duration-base) var(--ease-out-quint), border-color var(--duration-base) var(--ease-out-quint)",
-          }}
-        >
-          <Arrow />
-        </span>
+        <div className="mt-auto flex items-center gap-2 pt-6 text-sm font-medium text-ink">
+          <span>Read</span>
+          <span
+            aria-hidden
+            className="inline-block group-hover:translate-x-1"
+            style={{
+              transition:
+                "transform var(--duration-fast) var(--ease-out-quint)",
+            }}
+          >
+            →
+          </span>
+        </div>
       </div>
     </Link>
   );
 }
+
+const NEWS_GRADIENTS = [
+  "linear-gradient(135deg, #FFE4D9 0%, #FFB897 100%)",
+  "linear-gradient(135deg, #E0E7FF 0%, #A5B4FC 100%)",
+  "linear-gradient(135deg, #FCE4EC 0%, #F48FB1 100%)",
+  "linear-gradient(135deg, #E8F5E9 0%, #A5D6A7 100%)",
+  "linear-gradient(135deg, #FFF7E6 0%, #FFD08A 100%)",
+];
 
 function formatDate(iso: string): string {
   const d = new Date(iso);
@@ -150,25 +148,4 @@ function formatDate(iso: string): string {
     day: "numeric",
     year: "numeric",
   });
-}
-
-function Arrow() {
-  return (
-    <svg
-      width="14"
-      height="14"
-      viewBox="0 0 16 16"
-      fill="none"
-      aria-hidden
-      className="shrink-0"
-    >
-      <path
-        d="M4 12L12 4M12 4H6M12 4V10"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
 }

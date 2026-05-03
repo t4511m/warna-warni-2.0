@@ -2,8 +2,6 @@
 
 import { motion } from "framer-motion";
 
-const EASE_OUT_QUINT = [0.22, 1, 0.36, 1] as const;
-
 type StaggerProps = {
   children: React.ReactNode;
   className?: string;
@@ -40,7 +38,12 @@ const itemVariants = {
   show: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, ease: EASE_OUT_QUINT },
+    transition: {
+      type: "spring" as const,
+      stiffness: 80,
+      damping: 18,
+      mass: 0.8,
+    },
   },
 };
 

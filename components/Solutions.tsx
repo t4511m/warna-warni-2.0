@@ -30,7 +30,7 @@ const SOLUTIONS: readonly Solution[] = [
     number: "04",
     title: "Installation & maintenance",
     description:
-      "Crews on the ground, on-call. Cleaning, repair, and content rotation handled.",
+      "Crews on the ground, on call. Cleaning, repair, and content rotation handled.",
   },
   {
     number: "05",
@@ -48,36 +48,25 @@ const SOLUTIONS: readonly Solution[] = [
 
 export function Solutions() {
   return (
-    <section className="relative bg-steel text-paper" id="solutions">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-70"
-        style={{
-          backgroundImage:
-            "radial-gradient(50% 50% at 0% 0%, rgb(232 50 10 / 0.18), transparent 60%), radial-gradient(50% 50% at 100% 100%, rgb(245 166 35 / 0.12), transparent 60%)",
-        }}
-      />
-
-      <div className="relative mx-auto max-w-7xl px-4 py-20 md:px-10 md:py-28 lg:px-16">
+    <section className="bg-paper text-ink" id="solutions">
+      <div className="mx-auto max-w-7xl px-6 py-24 md:px-10 md:py-32 lg:px-12">
         <Reveal>
-          <div className="grid gap-6 md:grid-cols-12 md:gap-10">
-            <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-paper/60 md:col-span-3">
-              <span className="mr-3 inline-block h-px w-8 align-middle bg-paper/40" />
+          <div className="mx-auto max-w-3xl text-center">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
               Solutions
             </p>
             <h2
-              className="font-display tracking-[-0.02em] text-paper md:col-span-9"
+              className="mt-4 font-semibold tracking-[-0.025em] text-ink"
               style={{
-                fontWeight: 800,
-                fontSize: "clamp(2.25rem, 5vw, 4.5rem)",
-                lineHeight: 1.02,
+                fontSize: "clamp(2rem, 5vw, 3.75rem)",
+                lineHeight: 1.05,
+                fontWeight: 700,
               }}
             >
-              End-to-end OOH,
-              <br />
-              <em className="italic text-accent">handled.</em>
+              End-to-end OOH,{" "}
+              <span className="text-muted">handled.</span>
             </h2>
-            <p className="max-w-2xl text-base text-paper/70 md:col-span-9 md:col-start-4 md:text-lg">
+            <p className="mt-5 text-base text-muted md:text-lg">
               One partner from the first site walk to the post-campaign report —
               so your team focuses on the brand, not the logistics.
             </p>
@@ -86,7 +75,7 @@ export function Solutions() {
 
         <Stagger
           stagger={0.06}
-          className="mt-14 grid grid-cols-1 gap-px bg-paper/10 md:mt-20 md:grid-cols-3 md:grid-rows-2"
+          className="mt-14 grid grid-cols-1 gap-5 md:mt-20 md:grid-cols-2 md:gap-6 lg:grid-cols-3"
         >
           {SOLUTIONS.map((s) => (
             <StaggerItem key={s.number} className="flex">
@@ -101,61 +90,31 @@ export function Solutions() {
 
 function SolutionCard({ solution }: { solution: Solution }) {
   return (
-    <article className="group relative w-full overflow-hidden bg-steel p-6 md:p-8">
+    <article
+      className="group relative flex w-full flex-col overflow-hidden rounded-3xl bg-mist p-7 hover:-translate-y-1 hover:shadow-card-hover md:p-8"
+      style={{
+        transition:
+          "transform var(--duration-slow) var(--ease-out-quint), box-shadow var(--duration-slow) var(--ease-out-quint)",
+      }}
+    >
       <span
         aria-hidden
-        className="absolute inset-x-0 top-0 h-px origin-left scale-x-0 bg-accent group-hover:scale-x-100"
+        className="absolute inset-x-0 top-0 h-1 origin-left scale-x-0 bg-accent group-hover:scale-x-100"
         style={{
-          transition:
-            "transform var(--duration-slow) var(--ease-out-quint)",
+          transition: "transform var(--duration-slow) var(--ease-out-quint)",
         }}
       />
 
-      <div className="flex items-start justify-between gap-4">
-        <span className="font-mono text-xs tracking-[0.28em] text-paper/45">
-          {solution.number}
-        </span>
-        <span
-          className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-paper/15 text-paper/60 group-hover:border-accent group-hover:text-accent"
-          style={{
-            transition:
-              "border-color var(--duration-base) var(--ease-out-quint), color var(--duration-base) var(--ease-out-quint)",
-          }}
-        >
-          <ArrowUpRight />
-        </span>
-      </div>
+      <span className="text-sm font-medium tracking-wide text-muted">
+        {solution.number}
+      </span>
 
-      <h3
-        className="mt-10 font-display text-3xl leading-tight tracking-tight text-paper md:mt-16 md:text-[2rem]"
-        style={{ fontWeight: 600 }}
-      >
+      <h3 className="mt-10 text-2xl font-semibold tracking-tight text-ink md:mt-14 md:text-[1.75rem]">
         {solution.title}
       </h3>
-      <p className="mt-3 max-w-sm text-sm text-paper/65 md:text-base">
+      <p className="mt-3 text-base leading-relaxed text-muted">
         {solution.description}
       </p>
     </article>
-  );
-}
-
-function ArrowUpRight() {
-  return (
-    <svg
-      width="14"
-      height="14"
-      viewBox="0 0 16 16"
-      fill="none"
-      aria-hidden
-      className="shrink-0"
-    >
-      <path
-        d="M4 12L12 4M12 4H6M12 4V10"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
   );
 }

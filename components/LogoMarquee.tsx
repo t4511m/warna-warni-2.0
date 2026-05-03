@@ -15,11 +15,14 @@ const CLIENTS = [
 
 export function LogoMarquee() {
   return (
-    <section className="bg-paper py-10 md:py-14" aria-label="Selected clients">
-      <p className="px-4 text-center font-mono text-[11px] uppercase tracking-[0.3em] text-ink/50 md:px-10">
+    <section
+      className="bg-paper py-16 md:py-20"
+      aria-label="Selected clients"
+    >
+      <p className="px-6 text-center text-xs font-semibold uppercase tracking-[0.2em] text-muted md:px-10">
         Trusted by brands across Indonesia
       </p>
-      <div className="mt-6 overflow-hidden">
+      <div className="mt-8 overflow-hidden">
         <div className="flex w-max animate-marquee">
           <Track />
           <Track />
@@ -35,7 +38,7 @@ function Track() {
       {CLIENTS.map((c) => (
         <li
           key={c}
-          className="flex items-center gap-12 px-8 font-display text-3xl tracking-tight text-ink/35 md:text-4xl"
+          className="flex items-center gap-12 px-8 text-2xl font-semibold tracking-tight text-ink/30 md:text-3xl"
         >
           <span>{c}</span>
         </li>
