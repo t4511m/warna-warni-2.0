@@ -1,63 +1,131 @@
 "use client";
 
+import { motion, useReducedMotion } from "framer-motion";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useEffect, useRef } from "react";
 import { Reveal } from "@/components/Reveal";
-import { Stagger, StaggerItem } from "@/components/Stagger";
 
 type City = {
   name: string;
   coords: [number, number];
   count: number;
   region: string;
+  color: string;
 };
 
 const CITIES: readonly City[] = [
-  { name: "Jakarta", coords: [106.8456, -6.2088], count: 412, region: "Java" },
-  { name: "Surabaya", coords: [112.7521, -7.2575], count: 187, region: "Java" },
-  { name: "Bandung", coords: [107.6098, -6.9175], count: 138, region: "Java" },
-  { name: "Bali", coords: [115.2126, -8.6705], count: 96, region: "Bali" },
-  { name: "Medan", coords: [98.6722, 3.5952], count: 124, region: "Sumatera" },
-  { name: "Makassar", coords: [119.4327, -5.1477], count: 78, region: "Sulawesi" },
+  {
+    name: "Jakarta",
+    coords: [106.8456, -6.2088],
+    count: 412,
+    region: "Java",
+    color: "var(--color-cinnabar)",
+  },
+  {
+    name: "Surabaya",
+    coords: [112.7521, -7.2575],
+    count: 187,
+    region: "Java",
+    color: "var(--color-ultramarine)",
+  },
+  {
+    name: "Bandung",
+    coords: [107.6098, -6.9175],
+    count: 138,
+    region: "Java",
+    color: "var(--color-jade)",
+  },
+  {
+    name: "Bali",
+    coords: [115.2126, -8.6705],
+    count: 96,
+    region: "Bali",
+    color: "var(--color-magenta)",
+  },
+  {
+    name: "Medan",
+    coords: [98.6722, 3.5952],
+    count: 124,
+    region: "Sumatera",
+    color: "var(--color-sand)",
+  },
+  {
+    name: "Makassar",
+    coords: [119.4327, -5.1477],
+    count: 78,
+    region: "Sulawesi",
+    color: "var(--color-cinnabar)",
+  },
 ] as const;
 
 const TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
+const MAX_COUNT = Math.max(...CITIES.map((c) => c.count));
 
 export function Locations() {
   return (
-    <section className="bg-mist text-ink" id="locations">
-      <div className="mx-auto max-w-7xl px-6 py-24 md:px-10 md:py-32 lg:px-12">
-        <Reveal>
-          <div className="mx-auto max-w-3xl text-center">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
-              Locations
-            </p>
+    <section
+      style={{
+        backgroundColor: "var(--color-carbon)",
+        color: "var(--color-kapur)",
+      }}
+      id="locations"
+    >
+      <div className="mx-auto max-w-[1400px] px-6 py-24 md:px-8 md:py-32">
+        <header className="grid gap-8 md:grid-cols-12">
+          <div className="md:col-span-4">
+            <div className="flex items-center gap-3">
+              <span
+                className="h-px w-10"
+                style={{ backgroundColor: "var(--color-cinnabar)" }}
+              />
+              <span
+                className="font-mono text-[10px] uppercase tracking-[0.28em]"
+                style={{ color: "var(--color-cinnabar)" }}
+              >
+                №05 — Locations
+              </span>
+            </div>
+          </div>
+          <div className="md:col-span-8">
             <h2
-              className="mt-4 font-semibold tracking-[-0.025em] text-ink"
+              className="font-display tracking-[-0.035em]"
               style={{
-                fontSize: "clamp(2rem, 5vw, 3.75rem)",
-                lineHeight: 1.05,
-                fontWeight: 700,
+                fontSize: "clamp(2.5rem, 6vw, 5.5rem)",
+                lineHeight: 0.98,
+                fontWeight: 300,
+                fontVariationSettings: '"opsz" 144, "SOFT" 100',
               }}
             >
               From Sumatera to{" "}
-              <span className="text-muted">Sulawesi.</span>
+              <span
+                className="text-cinnabar"
+                style={{
+                  fontStyle: "italic",
+                  fontVariationSettings:
+                    '"opsz" 144, "SOFT" 100, "WONK" 1',
+                }}
+              >
+                Sulawesi.
+              </span>
             </h2>
-            <p className="mt-5 text-base text-muted md:text-lg">
+            <p
+              className="mt-6 max-w-xl text-base leading-relaxed md:text-lg"
+              style={{ color: "rgba(244,239,230,0.65)" }}
+            >
               A live map of the cities we operate in — billboards, videotrons,
               neonbox, and pedestrian bridges across six metros.
             </p>
           </div>
-        </Reveal>
+        </header>
 
         <Reveal delay={0.1}>
-          <div className="mt-14 md:mt-20">
+          <div className="mt-12 md:mt-16">
             <MapView />
           </div>
         </Reveal>
 
-        <CityGrid />
+        <CityChart />
       </div>
     </section>
   );
@@ -76,7 +144,7 @@ function MapView() {
       container: containerRef.current,
       style: "mapbox://styles/mapbox/dark-v11",
       center: [118, -2.5],
-      zoom: 4.5,
+      zoom: 4.4,
       attributionControl: false,
       cooperativeGestures: true,
     });
@@ -119,38 +187,89 @@ function MapView() {
   }, []);
 
   return (
-    <div className="relative overflow-hidden rounded-3xl bg-ink shadow-card">
+    <div
+      className="relative overflow-hidden"
+      style={{
+        backgroundColor: "var(--color-carbon-soft)",
+        outline: "1px solid var(--color-cinnabar)",
+        outlineOffset: "-1px",
+      }}
+    >
       <div
         ref={containerRef}
-        className="h-[420px] w-full md:h-[560px] lg:h-[640px]"
+        className="h-[440px] w-full md:h-[600px] lg:h-[680px]"
         aria-label="Map of locations across Indonesia"
       />
       {!TOKEN && <MapFallback />}
+
+      {/* Decorative corners */}
+      <Corner position="tl" />
+      <Corner position="tr" />
+      <Corner position="bl" />
+      <Corner position="br" />
     </div>
+  );
+}
+
+function Corner({ position }: { position: "tl" | "tr" | "bl" | "br" }) {
+  const isLeft = position[1] === "l";
+  const isTop = position[0] === "t";
+  return (
+    <span
+      aria-hidden
+      className="pointer-events-none absolute z-10 h-4 w-4"
+      style={{
+        [isTop ? "top" : "bottom"]: "8px",
+        [isLeft ? "left" : "right"]: "8px",
+        [isTop ? "borderTop" : "borderBottom"]:
+          "1.5px solid var(--color-cinnabar)",
+        [isLeft ? "borderLeft" : "borderRight"]:
+          "1.5px solid var(--color-cinnabar)",
+      }}
+    />
   );
 }
 
 function MapFallback() {
   return (
-    <div className="absolute inset-0 flex items-center justify-center bg-ink p-8 text-paper">
+    <div
+      className="absolute inset-0 flex items-center justify-center p-8"
+      style={{ backgroundColor: "var(--color-carbon)" }}
+    >
       <div
         aria-hidden
         className="absolute inset-0"
         style={{
           backgroundImage:
-            "radial-gradient(60% 50% at 50% 40%, rgb(232 50 10 / 0.18), transparent 70%)",
+            "radial-gradient(60% 50% at 50% 40%, rgb(242 93 39 / 0.18), transparent 70%)",
         }}
       />
       <div className="relative max-w-md text-center">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
+        <p
+          className="font-mono text-[10px] uppercase tracking-[0.28em]"
+          style={{ color: "var(--color-cinnabar)" }}
+        >
           Map unavailable
         </p>
-        <p className="mt-3 text-2xl font-semibold tracking-tight text-paper md:text-3xl">
-          Set <code className="text-accent">NEXT_PUBLIC_MAPBOX_TOKEN</code> to
-          enable the live map.
+        <p
+          className="mt-4 font-display text-2xl tracking-[-0.02em] md:text-3xl"
+          style={{
+            color: "var(--color-kapur)",
+            fontWeight: 400,
+            fontVariationSettings: '"opsz" 144, "SOFT" 100',
+          }}
+        >
+          Set{" "}
+          <code
+            className="text-cinnabar"
+            style={{ fontFamily: "var(--font-mono)" }}
+          >
+            NEXT_PUBLIC_MAPBOX_TOKEN
+          </code>{" "}
+          to enable the live map.
         </p>
-        <p className="mt-3 text-sm text-paper/70">
-          Six cities, 1000+ locations across Indonesia — Jakarta, Surabaya,
+        <p className="mt-4 text-sm" style={{ color: "rgba(244,239,230,0.65)" }}>
+          Six cities, 1.000+ locations across Indonesia — Jakarta, Surabaya,
           Bandung, Bali, Medan, Makassar.
         </p>
       </div>
@@ -158,41 +277,80 @@ function MapFallback() {
   );
 }
 
-function CityGrid() {
+function CityChart() {
+  const reduced = useReducedMotion();
   return (
-    <Stagger
-      stagger={0.05}
-      className="mt-8 grid grid-cols-2 gap-3 md:mt-10 md:grid-cols-3 md:gap-5 lg:grid-cols-6"
-    >
-      {CITIES.map((c) => (
-        <StaggerItem key={c.name} className="flex">
-          <article
-            className="group relative flex w-full flex-col gap-1 overflow-visible rounded-2xl bg-paper p-6 pb-7 shadow-card ring-0 ring-accent/0 hover:-translate-y-1 hover:shadow-card-hover hover:ring-2 hover:ring-accent/25"
-            style={{
-              transition:
-                "transform var(--duration-slow) var(--ease-out-quint), box-shadow var(--duration-slow) var(--ease-out-quint), --tw-ring-color var(--duration-base) var(--ease-out-quint)",
-            }}
-          >
-            <span
-              aria-hidden
-              className="absolute inset-x-0 top-0 h-1 origin-left scale-x-0 rounded-t-2xl bg-accent group-hover:scale-x-100"
-              style={{
-                transition:
-                  "transform var(--duration-slow) var(--ease-out-quint)",
-              }}
-            />
-            <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">
-              {c.region}
-            </p>
-            <p className="pb-0.5 text-2xl font-semibold tracking-tight text-ink">
-              {c.name}
-            </p>
-            <p className="mt-2 pb-1 text-sm font-medium text-accent">
-              {c.count} locations
-            </p>
-          </article>
-        </StaggerItem>
-      ))}
-    </Stagger>
+    <div className="mt-12 md:mt-16">
+      <div
+        className="mb-6 flex items-center justify-between border-b pb-3 font-mono text-[10px] uppercase tracking-[0.24em]"
+        style={{
+          borderColor: "rgba(244,239,230,0.16)",
+          color: "rgba(244,239,230,0.55)",
+        }}
+      >
+        <span>City · Region · Locations</span>
+        <span>Sorted by inventory</span>
+      </div>
+
+      <ul className="flex flex-col">
+        {CITIES.map((c, i) => {
+          const pct = (c.count / MAX_COUNT) * 100;
+          return (
+            <motion.li
+              key={c.name}
+              initial={reduced ? { opacity: 0 } : { opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-10%" }}
+              transition={{ duration: 0.5, delay: i * 0.06 }}
+              className="group relative grid grid-cols-12 items-center gap-3 border-b py-4 md:py-5"
+              style={{ borderColor: "rgba(244,239,230,0.10)" }}
+            >
+              <span
+                className="col-span-1 font-mono text-[10px] uppercase tracking-[0.22em]"
+                style={{ color: "rgba(244,239,230,0.45)" }}
+              >
+                №0{i + 1}
+              </span>
+              <span
+                className="col-span-3 font-display text-2xl md:col-span-2 md:text-3xl"
+                style={{
+                  color: "var(--color-kapur)",
+                  fontWeight: 400,
+                  fontVariationSettings: '"opsz" 144, "SOFT" 100',
+                }}
+              >
+                {c.name}
+              </span>
+              <span
+                className="col-span-3 font-mono text-[10px] uppercase tracking-[0.22em] md:col-span-2"
+                style={{ color: "rgba(244,239,230,0.55)" }}
+              >
+                {c.region}
+              </span>
+              <div className="col-span-4 hidden md:col-span-5 md:block">
+                <motion.div
+                  className="h-px origin-left"
+                  initial={{ scaleX: 0 }}
+                  whileInView={{ scaleX: pct / 100 }}
+                  viewport={{ once: true, margin: "-10%" }}
+                  transition={{
+                    duration: 1.2,
+                    delay: i * 0.08 + 0.2,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
+                  style={{ backgroundColor: c.color, height: "2px" }}
+                />
+              </div>
+              <span
+                className="col-span-5 text-right font-mono text-sm tabular-nums md:col-span-2"
+                style={{ color: c.color }}
+              >
+                {c.count}
+              </span>
+            </motion.li>
+          );
+        })}
+      </ul>
+    </div>
   );
 }

@@ -1,14 +1,14 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
-import { AnimatedDivider } from "@/components/AnimatedDivider";
-import { Reveal } from "@/components/Reveal";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { useState } from "react";
 
 type Solution = {
   number: string;
   title: string;
   description: string;
-  gradient: string;
+  detail: string;
+  color: string;
 };
 
 const SOLUTIONS: readonly Solution[] = [
@@ -17,81 +17,127 @@ const SOLUTIONS: readonly Solution[] = [
     title: "Site survey & planning",
     description:
       "Footfall, sightline, and audience profiling to find the locations that actually move the needle.",
-    gradient:
-      "linear-gradient(135deg, #FFE4D9 0%, #FFCFB8 50%, #FFB897 100%)",
+    detail:
+      "Walked-and-mapped surveys, traffic counts, and audience overlay against your CRM. We arrive with a shortlist, not a brochure.",
+    color: "var(--color-cinnabar)",
   },
   {
     number: "02",
     title: "Creative production",
     description:
       "Design, fabrication, and print — every format from large-format vinyl to LED content.",
-    gradient:
-      "linear-gradient(135deg, #E0E7FF 0%, #C7D2FE 50%, #A5B4FC 100%)",
+    detail:
+      "In-house creative team for static, motion, and dayparted LED. Studio-controlled colour profiles per format.",
+    color: "var(--color-ultramarine)",
   },
   {
     number: "03",
     title: "Permits & licensing",
     description:
       "We navigate municipal permits across six cities so your campaign launches on time.",
-    gradient:
-      "linear-gradient(135deg, #FFF7E6 0%, #FFE4B5 50%, #FFD08A 100%)",
+    detail:
+      "Fifty-year relationships with regional authorities. Permits are a known, scheduled step — not a surprise.",
+    color: "var(--color-jade)",
   },
   {
     number: "04",
     title: "Installation & maintenance",
     description:
       "Crews on the ground, on call. Cleaning, repair, and content rotation handled.",
-    gradient:
-      "linear-gradient(135deg, #FCE4EC 0%, #F8BBD0 50%, #F48FB1 100%)",
+    detail:
+      "Crews in every metro for fast swaps, scheduled maintenance windows, and 24/7 emergency response.",
+    color: "var(--color-magenta)",
   },
   {
     number: "05",
     title: "Audience measurement",
     description:
       "Verified impressions, traffic data, and post-campaign reporting you can show a CMO.",
-    gradient:
-      "linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 50%, #A5D6A7 100%)",
+    detail:
+      "Standardised against industry impression methodology. Every campaign ships with a post-flight report.",
+    color: "var(--color-sand)",
   },
   {
     number: "06",
     title: "Network buying",
     description:
       "Bundle billboards, videotrons, and bridges for city-wide saturation in a single deal.",
-    gradient:
-      "linear-gradient(135deg, #E0F7FA 0%, #B2EBF2 50%, #80DEEA 100%)",
+    detail:
+      "One contract. One invoice. Discounted rates across formats when you book the network as a package.",
+    color: "var(--color-cinnabar)",
   },
 ] as const;
 
 export function Solutions() {
+  const [open, setOpen] = useState<string | null>("01");
+
   return (
-    <section className="bg-paper text-ink" id="solutions">
-      <div className="mx-auto max-w-7xl px-6 py-24 md:px-10 md:py-32 lg:px-12">
-        <Reveal>
-          <div className="mx-auto max-w-3xl pb-1 text-center">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
-              Solutions
-            </p>
+    <section
+      style={{
+        backgroundColor: "var(--color-bone)",
+        color: "var(--color-carbon)",
+      }}
+      id="solutions"
+    >
+      <div className="mx-auto max-w-[1400px] px-6 py-24 md:px-8 md:py-32">
+        <header className="grid gap-8 md:grid-cols-12">
+          <div className="md:col-span-4">
+            <div className="flex items-center gap-3">
+              <span
+                className="h-px w-10"
+                style={{ backgroundColor: "var(--color-cinnabar)" }}
+              />
+              <span
+                className="font-mono text-[10px] uppercase tracking-[0.28em]"
+                style={{ color: "var(--color-cinnabar)" }}
+              >
+                №04 — Solutions
+              </span>
+            </div>
+          </div>
+          <div className="md:col-span-8">
             <h2
-              className="mt-4 pb-1 font-semibold tracking-[-0.025em] text-ink"
+              className="font-display tracking-[-0.035em]"
               style={{
-                fontSize: "clamp(2rem, 5vw, 3.75rem)",
-                lineHeight: 1.08,
-                fontWeight: 700,
+                fontSize: "clamp(2.5rem, 6vw, 5.5rem)",
+                lineHeight: 0.98,
+                fontWeight: 300,
+                fontVariationSettings: '"opsz" 144, "SOFT" 100',
               }}
             >
               End-to-end OOH,{" "}
-              <span className="text-muted">handled.</span>
+              <span
+                className="text-cinnabar"
+                style={{
+                  fontStyle: "italic",
+                  fontVariationSettings:
+                    '"opsz" 144, "SOFT" 100, "WONK" 1',
+                }}
+              >
+                handled.
+              </span>
             </h2>
-            <p className="mt-5 pb-1 text-base leading-relaxed text-muted md:text-lg">
-              One partner from the first site walk to the post-campaign report
-              — so your team focuses on the brand, not the logistics.
+            <p
+              className="mt-6 max-w-xl text-base leading-relaxed md:text-lg"
+              style={{ color: "var(--color-graphite)" }}
+            >
+              One partner from the first site walk to the post-campaign report —
+              your team focuses on the brand, we handle the rest.
             </p>
           </div>
-        </Reveal>
+        </header>
 
-        <div className="mt-20 flex flex-col gap-20 md:mt-28 md:gap-28">
-          {SOLUTIONS.map((s, i) => (
-            <SolutionRow key={s.number} solution={s} flip={i % 2 === 1} />
+        {/* Magazine table-of-contents */}
+        <div className="mt-16 md:mt-20">
+          {SOLUTIONS.map((s) => (
+            <SolutionRow
+              key={s.number}
+              solution={s}
+              open={open === s.number}
+              onToggle={() =>
+                setOpen((prev) => (prev === s.number ? null : s.number))
+              }
+            />
           ))}
         </div>
       </div>
@@ -101,107 +147,113 @@ export function Solutions() {
 
 function SolutionRow({
   solution,
-  flip,
+  open,
+  onToggle,
 }: {
   solution: Solution;
-  flip: boolean;
-}) {
-  return (
-    <div>
-      <AnimatedDivider className="mb-12 md:mb-16" />
-      <div className="grid items-center gap-10 md:grid-cols-2 md:gap-16">
-        <SlideIn
-          from={flip ? "right" : "left"}
-          className={`order-2 ${flip ? "md:order-2" : "md:order-1"}`}
-        >
-          <TextBlock solution={solution} />
-        </SlideIn>
-        <SlideIn
-          from={flip ? "left" : "right"}
-          className={`order-1 ${flip ? "md:order-1" : "md:order-2"}`}
-          delay={0.1}
-        >
-          <VisualBlock solution={solution} />
-        </SlideIn>
-      </div>
-    </div>
-  );
-}
-
-function TextBlock({ solution }: { solution: Solution }) {
-  return (
-    <div className="overflow-visible pb-1">
-      <p className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">
-        {solution.number}
-      </p>
-      <h3
-        className="mt-4 pb-1 font-semibold leading-[1.1] tracking-[-0.02em] text-ink"
-        style={{ fontSize: "clamp(1.75rem, 3.5vw, 2.75rem)" }}
-      >
-        {solution.title}
-      </h3>
-      <p className="mt-4 max-w-md pb-1 text-base leading-relaxed text-muted md:text-lg">
-        {solution.description}
-      </p>
-    </div>
-  );
-}
-
-function VisualBlock({ solution }: { solution: Solution }) {
-  return (
-    <div
-      className="relative aspect-[5/4] w-full overflow-hidden rounded-3xl shadow-card"
-      style={{ backgroundImage: solution.gradient }}
-    >
-      <div
-        aria-hidden
-        className="absolute inset-0"
-        style={{
-          backgroundImage:
-            "radial-gradient(120% 80% at 100% 100%, rgb(0 0 0 / 0.06), transparent 60%)",
-        }}
-      />
-      <div className="absolute inset-0 flex items-end justify-end overflow-visible p-6 md:p-10">
-        <span
-          aria-hidden
-          className="font-semibold leading-none tracking-[-0.05em] text-ink/15"
-          style={{ fontSize: "clamp(8rem, 22vw, 18rem)" }}
-        >
-          {solution.number}
-        </span>
-      </div>
-    </div>
-  );
-}
-
-function SlideIn({
-  children,
-  from,
-  className,
-  delay = 0,
-}: {
-  children: React.ReactNode;
-  from: "left" | "right";
-  className?: string;
-  delay?: number;
+  open: boolean;
+  onToggle: () => void;
 }) {
   const reduced = useReducedMotion();
-  const x = from === "left" ? -40 : 40;
+
   return (
     <motion.div
-      className={className}
-      initial={reduced ? { opacity: 0 } : { opacity: 0, x }}
-      whileInView={reduced ? { opacity: 1 } : { opacity: 1, x: 0 }}
+      initial={reduced ? { opacity: 0 } : { opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-10%" }}
-      transition={{
-        type: "spring",
-        stiffness: 70,
-        damping: 18,
-        mass: 0.9,
-        delay,
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      style={{
+        borderTop: "1px solid var(--color-carbon)",
       }}
     >
-      {children}
+      <button
+        type="button"
+        onClick={onToggle}
+        data-cursor="grow"
+        aria-expanded={open}
+        className="group flex w-full items-center justify-between gap-6 py-6 text-left md:py-10"
+      >
+        <div className="flex items-center gap-6 md:gap-10">
+          <span
+            className="font-mono text-xs uppercase tracking-[0.24em] tabular-nums md:text-sm"
+            style={{ color: solution.color, minWidth: "3ch" }}
+          >
+            №{solution.number}
+          </span>
+          <span
+            className="font-display tracking-[-0.025em]"
+            style={{
+              fontSize: "clamp(1.75rem, 4vw, 3.5rem)",
+              lineHeight: 1.05,
+              fontWeight: 300,
+              fontVariationSettings: '"opsz" 144, "SOFT" 100',
+              color: open ? solution.color : "var(--color-carbon)",
+              transition: "color var(--duration-base) var(--ease-out-quint)",
+            }}
+          >
+            {solution.title}
+          </span>
+        </div>
+        <span
+          aria-hidden
+          className="shrink-0 font-display text-3xl md:text-4xl"
+          style={{
+            color: solution.color,
+            transform: open ? "rotate(45deg)" : "rotate(0deg)",
+            transition: "transform var(--duration-slow) var(--ease-out-quint)",
+            fontWeight: 300,
+            fontVariationSettings: '"opsz" 144, "SOFT" 100',
+          }}
+        >
+          +
+        </span>
+      </button>
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            key="content"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{
+              height: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
+              opacity: { duration: 0.3, delay: 0.1 },
+            }}
+            className="overflow-hidden"
+          >
+            <div className="grid gap-8 pb-10 md:grid-cols-12 md:gap-10 md:pb-14">
+              <div className="md:col-span-4 md:col-start-3">
+                <p
+                  className="text-base leading-relaxed md:text-lg"
+                  style={{ color: "var(--color-carbon)" }}
+                >
+                  {solution.description}
+                </p>
+              </div>
+              <div className="md:col-span-5">
+                <p
+                  className="text-base leading-relaxed"
+                  style={{ color: "var(--color-graphite)" }}
+                >
+                  {solution.detail}
+                </p>
+                <a
+                  href="#contact"
+                  data-cursor="grow"
+                  className="mt-6 inline-flex items-center gap-2 border-b py-1 font-mono text-[10px] uppercase tracking-[0.28em]"
+                  style={{
+                    color: solution.color,
+                    borderColor: solution.color,
+                  }}
+                >
+                  <span>Brief us</span>
+                  <span aria-hidden>↗</span>
+                </a>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }

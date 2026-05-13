@@ -1,81 +1,89 @@
 "use client";
 
-import {
-  motion,
-  useReducedMotion,
-  type Variants,
-} from "framer-motion";
-
-const LINE_1 = ["Your", "message,"];
-const LINE_2 = ["Everywhere."];
+import { motion, useReducedMotion, type Variants } from "framer-motion";
 
 const containerVariants: Variants = {
   hidden: {},
   show: {
-    transition: { staggerChildren: 0.12, delayChildren: 0.15 },
+    transition: { staggerChildren: 0.09, delayChildren: 0.18 },
   },
 };
 
-const wordVariantsFull: Variants = {
-  hidden: { opacity: 0, y: "0.6em" },
+const lineVariants: Variants = {
+  hidden: { y: "112%" },
   show: {
-    opacity: 1,
-    y: 0,
-    transition: { type: "spring", stiffness: 80, damping: 18, mass: 0.8 },
+    y: "0%",
+    transition: { type: "spring", stiffness: 60, damping: 16, mass: 0.95 },
   },
 };
 
-const wordVariantsReduced: Variants = {
+const reducedLine: Variants = {
   hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: { type: "spring", stiffness: 80, damping: 18, mass: 0.8 },
-  },
+  show: { opacity: 1, transition: { duration: 0.45 } },
 };
 
+/**
+ * Editorial display headline:
+ *   YOUR MESSAGE,        (sans · big · carbon)
+ *   in living color.     (italic serif · cinnabar)
+ *   Everywhere.          (sans · big · carbon)
+ */
 export function HeroHeadline() {
   const reduced = useReducedMotion();
-  const wordVariants = reduced ? wordVariantsReduced : wordVariantsFull;
+  const v = reduced ? reducedLine : lineVariants;
 
   return (
     <motion.h1
       initial="hidden"
       animate="show"
       variants={containerVariants}
-      className="font-sans text-ink"
+      className="text-carbon"
       style={{
-        fontWeight: 700,
-        fontSize: "clamp(2.75rem, 8vw, 6.5rem)",
-        lineHeight: 1.12,
-        letterSpacing: "-0.03em",
-        overflow: "visible",
-        paddingBottom: "0.12em",
+        fontFamily: "var(--font-display)",
+        fontVariationSettings: '"opsz" 144, "SOFT" 100',
+        fontSize: "clamp(3.25rem, 11vw, 9rem)",
+        lineHeight: 0.95,
+        letterSpacing: "-0.045em",
+        fontWeight: 300,
       }}
     >
-      <span className="sr-only">Your message, Everywhere.</span>
-      <span aria-hidden className="block pb-1">
-        {LINE_1.map((word, i) => (
-          <motion.span
-            key={`l1-${i}`}
-            variants={wordVariants}
-            className="inline-block align-bottom"
-          >
-            {word}
-            {i < LINE_1.length - 1 ? " " : ""}
-          </motion.span>
-        ))}
+      <span className="sr-only">
+        Your message, in living color, everywhere.
       </span>
-      <span aria-hidden className="block pb-1">
-        {LINE_2.map((word, i) => (
-          <motion.span
-            key={`l2-${i}`}
-            variants={wordVariants}
-            className="inline-block align-bottom text-accent"
-          >
-            {word}
-          </motion.span>
-        ))}
-      </span>
+      <Line>
+        <motion.span variants={v} className="block">
+          Your message,
+        </motion.span>
+      </Line>
+      <Line>
+        <motion.span
+          variants={v}
+          className="block text-cinnabar"
+          style={{
+            fontStyle: "italic",
+            fontVariationSettings: '"opsz" 144, "SOFT" 100, "WONK" 1',
+          }}
+        >
+          in living color
+        </motion.span>
+      </Line>
+      <Line>
+        <motion.span variants={v} className="block">
+          everywhere<span className="text-cinnabar">.</span>
+        </motion.span>
+      </Line>
     </motion.h1>
+  );
+}
+
+function Line({ children }: { children: React.ReactNode }) {
+  return (
+    <span
+      aria-hidden
+      className="block overflow-hidden"
+      style={{ paddingBottom: "0.18em", marginBottom: "-0.14em" }}
+    >
+      {children}
+    </span>
   );
 }

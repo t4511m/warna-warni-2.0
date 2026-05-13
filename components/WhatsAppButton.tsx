@@ -1,7 +1,12 @@
+"use client";
+
+import { useState } from "react";
+
 const WHATSAPP_E164 = "6281234567890";
-const WHATSAPP_MESSAGE = "Halo warna-warni, saya tertarik dengan layanan OOH.";
+const WHATSAPP_MESSAGE = "Halo Warna Warni, saya tertarik dengan layanan OOH.";
 
 export function WhatsAppButton() {
+  const [hovered, setHovered] = useState(false);
   const href = `https://wa.me/${WHATSAPP_E164}?text=${encodeURIComponent(
     WHATSAPP_MESSAGE,
   )}`;
@@ -12,23 +17,55 @@ export function WhatsAppButton() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat with us on WhatsApp"
-      className="group fixed bottom-5 right-5 z-50 inline-flex h-[4.2rem] w-[4.2rem] animate-wa-enter items-center justify-center rounded-full text-paper shadow-lg hover:-translate-y-px hover:shadow-xl md:bottom-8 md:right-8"
+      data-cursor="grow"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className="group fixed bottom-5 right-5 z-50 inline-flex animate-wa-enter items-center md:bottom-8 md:right-8"
       style={{
-        backgroundColor: "#25D366",
-        transition:
-          "transform var(--duration-fast) var(--ease-out-quint), box-shadow var(--duration-base) var(--ease-out-quint)",
+        transition: "transform var(--duration-base) var(--ease-out-quint)",
       }}
     >
       <span
-        aria-hidden
-        className="absolute inset-0 -z-10 rounded-full"
+        className="relative inline-flex items-center overflow-hidden"
         style={{
-          backgroundColor: "#25D366",
-          opacity: 0.6,
-          animation: "marker-pulse 2.4s var(--ease-out-quint) infinite",
+          backgroundColor: "var(--color-carbon)",
+          color: "var(--color-kapur)",
+          boxShadow:
+            "0 2px 8px rgba(10,10,10,0.16), 0 16px 40px -16px rgba(10,10,10,0.30)",
         }}
-      />
-      <WhatsAppGlyph />
+      >
+        <span
+          aria-hidden
+          className="relative inline-flex h-14 w-14 shrink-0 items-center justify-center md:h-16 md:w-16"
+          style={{ backgroundColor: "#25D366", color: "#0a0a0a" }}
+        >
+          <span
+            aria-hidden
+            className="absolute inset-0 -z-0"
+            style={{
+              backgroundColor: "#25D366",
+              opacity: 0.5,
+              animation: "marker-pulse 2.4s var(--ease-out-quint) infinite",
+              borderRadius: "9999px",
+            }}
+          />
+          <span className="relative">
+            <WhatsAppGlyph />
+          </span>
+        </span>
+        <span
+          className="overflow-hidden whitespace-nowrap font-mono text-[10px] uppercase tracking-[0.24em]"
+          style={{
+            maxWidth: hovered ? "11rem" : "0",
+            paddingLeft: hovered ? "1rem" : "0",
+            paddingRight: hovered ? "1.25rem" : "0",
+            transition:
+              "max-width var(--duration-slow) var(--ease-out-quint), padding var(--duration-slow) var(--ease-out-quint)",
+          }}
+        >
+          Chat di WhatsApp
+        </span>
+      </span>
     </a>
   );
 }
@@ -36,8 +73,8 @@ export function WhatsAppButton() {
 function WhatsAppGlyph() {
   return (
     <svg
-      width="16"
-      height="16"
+      width="22"
+      height="22"
       viewBox="0 0 24 24"
       fill="currentColor"
       aria-hidden

@@ -4,10 +4,10 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const NAV_LINKS = [
-  { href: "#inventory", label: "Inventory" },
-  { href: "#solutions", label: "Solutions" },
-  { href: "#locations", label: "Locations" },
-  { href: "#journal", label: "Journal" },
+  { href: "#inventory", label: "Inventory", index: "01" },
+  { href: "#solutions", label: "Solutions", index: "02" },
+  { href: "#locations", label: "Locations", index: "03" },
+  { href: "#journal", label: "Journal", index: "04" },
 ] as const;
 
 const CTA = { href: "#contact", label: "Talk to us" } as const;
@@ -15,6 +15,7 @@ const CTA = { href: "#contact", label: "Talk to us" } as const;
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [time, setTime] = useState<string>("");
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -24,16 +25,28 @@ export function Navbar() {
   }, []);
 
   useEffect(() => {
+    const tick = () => {
+      const d = new Date();
+      const hh = d.getHours().toString().padStart(2, "0");
+      const mm = d.getMinutes().toString().padStart(2, "0");
+      setTime(`JKT · ${hh}:${mm}`);
+    };
+    tick();
+    const id = setInterval(tick, 30000);
+    return () => clearInterval(id);
+  }, []);
+
+  useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setOpen(false);
     };
     document.addEventListener("keydown", onKey);
-    const prevOverflow = document.body.style.overflow;
+    const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
       document.removeEventListener("keydown", onKey);
-      document.body.style.overflow = prevOverflow;
+      document.body.style.overflow = prev;
     };
   }, [open]);
 
@@ -41,57 +54,121 @@ export function Navbar() {
     <>
       <header
         data-scrolled={scrolled}
-        className="fixed inset-x-0 top-0 z-40 animate-nav-fade backdrop-blur-md bg-paper/70 data-[scrolled=true]:bg-paper/85 data-[scrolled=true]:backdrop-blur-xl data-[scrolled=true]:shadow-[0_1px_0_0_rgb(0_0_0/0.04),0_10px_30px_-14px_rgb(0_0_0/0.12)]"
+        className="fixed inset-x-0 top-0 z-40 animate-nav-fade"
         style={{
+          backgroundColor: scrolled
+            ? "rgba(244, 239, 230, 0.78)"
+            : "transparent",
+          backdropFilter: scrolled ? "blur(20px) saturate(140%)" : "none",
+          WebkitBackdropFilter: scrolled ? "blur(20px) saturate(140%)" : "none",
+          borderBottom: scrolled
+            ? "1px solid var(--color-line)"
+            : "1px solid transparent",
           transitionProperty:
-            "background-color, backdrop-filter, box-shadow",
+            "background-color, backdrop-filter, border-color",
           transitionDuration: "var(--duration-base)",
           transitionTimingFunction: "var(--ease-out-quint)",
         }}
       >
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-3 md:px-8 md:py-4">
+        {/* Top mono utility row */}
+        <div
+          className="hidden items-center justify-between border-b px-5 py-1.5 font-mono text-[10px] uppercase tracking-[0.22em] md:flex md:px-8"
+          style={{
+            borderColor: "var(--color-line-soft)",
+            color: "var(--color-graphite)",
+          }}
+        >
+          <span className="flex items-center gap-2">
+            <span
+              className="inline-block h-1.5 w-1.5 animate-pulse-soft rounded-full"
+              style={{ backgroundColor: "var(--color-cinnabar)" }}
+            />
+            Live network · 1.000+ locations
+          </span>
+          <span>{time}</span>
+        </div>
+
+        <div className="mx-auto flex max-w-[1400px] items-center justify-between px-5 py-3 md:px-8 md:py-4">
           <Link
             href="/"
-            aria-label="WW Demo — home"
-            className="text-lg font-bold tracking-tight text-ink md:text-xl"
+            aria-label="Warna Warni — home"
+            className="group flex items-baseline gap-2 leading-none"
           >
-            WW Demo
+            <span
+              className="font-display text-2xl tracking-[-0.03em] md:text-[1.65rem]"
+              style={{
+                fontVariationSettings: '"opsz" 144, "SOFT" 100',
+                color: "var(--color-carbon)",
+                fontWeight: 400,
+              }}
+            >
+              Warna
+            </span>
+            <span
+              className="font-display text-2xl tracking-[-0.03em] md:text-[1.65rem]"
+              style={{
+                fontStyle: "italic",
+                fontVariationSettings: '"opsz" 144, "SOFT" 100, "WONK" 1',
+                color: "var(--color-cinnabar)",
+                fontWeight: 400,
+              }}
+            >
+              Warni
+            </span>
+            <span
+              className="hidden font-mono text-[9px] uppercase tracking-[0.24em] md:inline"
+              style={{ color: "var(--color-smoke)" }}
+            >
+              ®/72
+            </span>
           </Link>
 
           <nav
             aria-label="Primary"
-            className="hidden items-center gap-8 md:flex"
+            className="hidden items-center gap-1 md:flex"
           >
             {NAV_LINKS.map((l) => (
               <Link
                 key={l.href}
                 href={l.href}
-                className="group relative text-sm font-medium text-ink/85 hover:text-ink"
+                className="group relative inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium"
                 style={{
+                  color: "var(--color-carbon)",
                   transition:
                     "color var(--duration-fast) var(--ease-out-quint)",
                 }}
               >
-                <span>{l.label}</span>
                 <span
-                  aria-hidden
-                  className="absolute -bottom-1 left-0 right-0 block h-px origin-left scale-x-0 bg-ink group-hover:scale-x-100"
-                  style={{
-                    transition:
-                      "transform var(--duration-base) var(--ease-out-quint)",
-                  }}
-                />
+                  className="font-mono text-[9px] uppercase tracking-[0.22em]"
+                  style={{ color: "var(--color-cinnabar)" }}
+                >
+                  {l.index}
+                </span>
+                <span className="link-underline">{l.label}</span>
               </Link>
             ))}
             <Link
               href={CTA.href}
-              className="rounded-full bg-ink px-5 py-2 text-sm font-medium text-paper hover:scale-[1.04]"
+              className="ml-3 inline-flex items-center gap-2 rounded-none border px-5 py-2.5 text-sm font-medium"
               style={{
+                backgroundColor: "var(--color-carbon)",
+                color: "var(--color-kapur)",
+                borderColor: "var(--color-carbon)",
                 transition:
-                  "transform var(--duration-fast) var(--ease-out-quint)",
+                  "background-color var(--duration-base) var(--ease-out-quint), color var(--duration-base) var(--ease-out-quint)",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor =
+                  "var(--color-cinnabar)";
+                e.currentTarget.style.borderColor = "var(--color-cinnabar)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "var(--color-carbon)";
+                e.currentTarget.style.borderColor = "var(--color-carbon)";
               }}
             >
               {CTA.label}
+              <span aria-hidden>↗</span>
             </Link>
           </nav>
 
@@ -101,7 +178,8 @@ export function Navbar() {
             aria-expanded={open}
             aria-controls="mobile-nav"
             onClick={() => setOpen((s) => !s)}
-            className="-mr-1 inline-flex h-10 w-10 items-center justify-center text-ink md:hidden"
+            className="-mr-1 inline-flex h-11 w-11 items-center justify-center md:hidden"
+            style={{ color: "var(--color-carbon)" }}
           >
             <Burger open={open} />
           </button>
@@ -114,22 +192,22 @@ export function Navbar() {
 }
 
 function Burger({ open }: { open: boolean }) {
-  const lineBase =
-    "absolute left-0 right-0 mx-auto block h-px w-5 bg-current";
   const ease = "var(--ease-out-quint)";
   return (
-    <span aria-hidden className="relative block h-3 w-5">
+    <span aria-hidden className="relative block h-3.5 w-6">
       <span
-        className={lineBase}
+        className="absolute left-0 right-0 mx-auto block h-px w-6"
         style={{
+          backgroundColor: "currentColor",
           top: open ? "50%" : "0",
           transform: open ? "translateY(-50%) rotate(45deg)" : "none",
           transition: `top var(--duration-fast) ${ease}, transform var(--duration-base) ${ease}`,
         }}
       />
       <span
-        className={lineBase}
+        className="absolute left-0 right-0 mx-auto block h-px w-6"
         style={{
+          backgroundColor: "currentColor",
           bottom: open ? "50%" : "0",
           transform: open ? "translateY(50%) rotate(-45deg)" : "none",
           transition: `bottom var(--duration-fast) ${ease}, transform var(--duration-base) ${ease}`,
@@ -154,7 +232,7 @@ function MobileDropdown({
         className="fixed inset-0 z-20"
         style={{
           pointerEvents: open ? "auto" : "none",
-          backgroundColor: open ? "rgb(0 0 0 / 0.18)" : "transparent",
+          backgroundColor: open ? "rgba(10,10,10,0.4)" : "transparent",
           transition:
             "background-color var(--duration-base) var(--ease-out-quint)",
         }}
@@ -164,41 +242,57 @@ function MobileDropdown({
         role="dialog"
         aria-label="Mobile navigation"
         aria-hidden={!open}
-        className="fixed inset-x-0 top-0 z-30 bg-paper/95 backdrop-blur-xl"
+        className="fixed inset-x-0 top-0 z-30"
         style={{
+          backgroundColor: "var(--color-kapur)",
+          borderBottom: "1px solid var(--color-line)",
           transform: open ? "translateY(0)" : "translateY(-100%)",
           transition:
             "transform var(--duration-slow) var(--ease-out-quint), box-shadow var(--duration-slow) var(--ease-out-quint)",
           boxShadow: open
-            ? "0 24px 48px -16px rgb(0 0 0 / 0.16)"
+            ? "0 24px 48px -16px rgba(10,10,10,0.20)"
             : "none",
         }}
       >
-        <div className="flex flex-col gap-1 px-6 pb-8 pt-20">
-          {NAV_LINKS.map((l) => (
+        <div className="flex flex-col gap-1 px-6 pb-10 pt-24">
+          {NAV_LINKS.map((l, i) => (
             <Link
               key={l.href}
               href={l.href}
               onClick={onClose}
               tabIndex={open ? 0 : -1}
-              className="py-2 text-2xl font-semibold tracking-tight text-ink hover:text-accent"
+              className="group flex items-baseline gap-3 border-b py-4 font-display text-4xl tracking-[-0.025em]"
               style={{
-                transition: "color var(--duration-fast) var(--ease-out-quint)",
+                borderColor: "var(--color-line)",
+                color: "var(--color-carbon)",
+                fontVariationSettings: '"opsz" 144, "SOFT" 100',
+                fontWeight: 400,
+                opacity: open ? 1 : 0,
+                transform: open ? "translateY(0)" : "translateY(8px)",
+                transition: `opacity var(--duration-slow) var(--ease-out-quint) ${i * 50}ms, transform var(--duration-slow) var(--ease-out-quint) ${i * 50}ms`,
               }}
             >
-              {l.label}
+              <span
+                className="font-mono text-[10px] uppercase tracking-[0.24em]"
+                style={{ color: "var(--color-cinnabar)" }}
+              >
+                — №{l.index}
+              </span>
+              <span>{l.label}</span>
             </Link>
           ))}
           <Link
             href={CTA.href}
             onClick={onClose}
             tabIndex={open ? 0 : -1}
-            className="mt-6 inline-flex items-center justify-center rounded-full bg-ink px-6 py-3.5 text-base font-medium text-paper hover:scale-[1.02]"
+            className="mt-8 inline-flex items-center justify-between px-6 py-4 text-base font-medium"
             style={{
-              transition: "transform var(--duration-base) var(--ease-out-quint)",
+              backgroundColor: "var(--color-carbon)",
+              color: "var(--color-kapur)",
             }}
           >
-            {CTA.label}
+            <span>{CTA.label}</span>
+            <span aria-hidden>↗</span>
           </Link>
         </div>
       </aside>

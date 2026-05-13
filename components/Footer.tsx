@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { DisplayTicker } from "@/components/Ticker";
 
 const PRODUCT_LINKS = [
   { href: "#inventory", label: "Billboard" },
@@ -31,81 +34,134 @@ const SOCIAL_LINKS = [
   { href: "#twitter", label: "X", glyph: XGlyph },
 ];
 
+const FOOTER_TICKER = [
+  "Warna Warni",
+  "Out of Home",
+  "Indonesia",
+  "Est. 1972",
+];
+
 export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-ink text-paper">
-      <div className="mx-auto max-w-7xl px-6 pt-20 pb-10 md:px-10 md:pt-24 md:pb-12 lg:px-12">
-        <div className="border-t border-paper/10 pt-16 md:pt-20">
-          <div className="grid gap-12 md:grid-cols-12 md:gap-8">
-            <div className="md:col-span-4">
-              <Link
-                href="/"
-                className="text-2xl font-bold tracking-tight text-paper md:text-3xl"
-              >
-                WW Demo
-              </Link>
-              <p className="mt-5 max-w-xs text-base leading-relaxed text-paper/65">
-                A modern out-of-home network across six Indonesian cities —
-                billboards, videotrons, neonbox, and pedestrian bridges.
-              </p>
-              <ul className="mt-8 flex items-center gap-4">
-                {SOCIAL_LINKS.map(({ href, label, glyph: Glyph }) => (
-                  <li key={label}>
-                    <a
-                      href={href}
-                      aria-label={label}
-                      className="group inline-flex h-10 w-10 items-center justify-center rounded-full border border-paper/15 text-paper/70 hover:scale-110 hover:border-accent hover:text-accent"
-                      style={{
-                        transition:
-                          "color var(--duration-fast) var(--ease-out-quint), border-color var(--duration-fast) var(--ease-out-quint), transform var(--duration-base) var(--ease-out-quint)",
-                      }}
-                    >
-                      <span
-                        className="inline-block group-hover:rotate-12"
-                        style={{
-                          transition:
-                            "transform var(--duration-base) var(--ease-out-quint)",
-                        }}
-                      >
-                        <Glyph />
-                      </span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
+    <footer
+      style={{
+        backgroundColor: "var(--color-carbon)",
+        color: "var(--color-kapur)",
+      }}
+    >
+      <DisplayTicker items={FOOTER_TICKER} variant="carbon" speed="slow" />
 
-            <FooterColumn
-              title="Inventory"
-              links={PRODUCT_LINKS}
-              className="md:col-span-3"
-            />
-            <FooterColumn
-              title="Company"
-              links={COMPANY_LINKS}
-              className="md:col-span-2"
-            />
-            <FooterColumn
-              title="Cities"
-              links={CITY_LINKS}
-              className="md:col-span-3"
-            />
+      <div className="mx-auto max-w-[1400px] px-6 pt-16 pb-10 md:px-8 md:pt-20 md:pb-12">
+        <div
+          className="grid gap-12 border-t pt-16 md:grid-cols-12 md:gap-8 md:pt-20"
+          style={{ borderColor: "rgba(244,239,230,0.18)" }}
+        >
+          <div className="md:col-span-4">
+            <Link
+              href="/"
+              className="flex items-baseline gap-2 leading-none"
+              data-cursor="grow"
+            >
+              <span
+                className="font-display"
+                style={{
+                  fontSize: "clamp(2rem, 4vw, 3rem)",
+                  fontVariationSettings: '"opsz" 144, "SOFT" 100',
+                  color: "var(--color-kapur)",
+                  fontWeight: 400,
+                  letterSpacing: "-0.03em",
+                }}
+              >
+                Warna
+              </span>
+              <span
+                className="font-display"
+                style={{
+                  fontSize: "clamp(2rem, 4vw, 3rem)",
+                  fontStyle: "italic",
+                  fontVariationSettings:
+                    '"opsz" 144, "SOFT" 100, "WONK" 1',
+                  color: "var(--color-cinnabar)",
+                  fontWeight: 400,
+                  letterSpacing: "-0.03em",
+                }}
+              >
+                Warni
+              </span>
+            </Link>
+            <p
+              className="mt-6 max-w-xs text-base leading-relaxed"
+              style={{ color: "rgba(244,239,230,0.65)" }}
+            >
+              An out-of-home advertising network across six Indonesian cities —
+              billboards, videotrons, neonbox, and pedestrian bridges.
+            </p>
+            <ul className="mt-8 flex items-center gap-3">
+              {SOCIAL_LINKS.map(({ href, label, glyph: Glyph }) => (
+                <li key={label}>
+                  <a
+                    href={href}
+                    aria-label={label}
+                    data-cursor="grow"
+                    className="group inline-flex h-11 w-11 items-center justify-center border"
+                    style={{
+                      borderColor: "rgba(244,239,230,0.30)",
+                      color: "rgba(244,239,230,0.85)",
+                      transition:
+                        "background-color var(--duration-base) var(--ease-out-quint), color var(--duration-base) var(--ease-out-quint), border-color var(--duration-base) var(--ease-out-quint)",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor =
+                        "var(--color-cinnabar)";
+                      e.currentTarget.style.borderColor = "var(--color-cinnabar)";
+                      e.currentTarget.style.color = "var(--color-kapur)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = "transparent";
+                      e.currentTarget.style.borderColor = "rgba(244,239,230,0.30)";
+                      e.currentTarget.style.color = "rgba(244,239,230,0.85)";
+                    }}
+                  >
+                    <Glyph />
+                  </a>
+                </li>
+              ))}
+            </ul>
           </div>
+
+          <FooterColumn
+            title="Inventory"
+            links={PRODUCT_LINKS}
+            className="md:col-span-3"
+          />
+          <FooterColumn
+            title="Company"
+            links={COMPANY_LINKS}
+            className="md:col-span-2"
+          />
+          <FooterColumn
+            title="Cities"
+            links={CITY_LINKS}
+            className="md:col-span-3"
+          />
         </div>
 
-        <div className="mt-16 flex flex-col gap-4 border-t border-paper/10 pt-6 text-xs text-paper/45 md:flex-row md:items-center md:justify-between">
-          <p>© {year} WW Demo. All rights reserved.</p>
+        <div
+          className="mt-16 flex flex-col gap-4 border-t pt-6 font-mono text-[10px] uppercase tracking-[0.24em] md:flex-row md:items-center md:justify-between"
+          style={{
+            borderColor: "rgba(244,239,230,0.18)",
+            color: "rgba(244,239,230,0.55)",
+          }}
+        >
+          <p>© {year} Warna Warni · All rights reserved</p>
           <ul className="flex flex-wrap gap-6">
             <li>
               <Link
                 href="#privacy"
-                className="hover:text-paper"
-                style={{
-                  transition:
-                    "color var(--duration-fast) var(--ease-out-quint)",
-                }}
+                className="link-underline"
+                data-cursor="grow"
               >
                 Privacy
               </Link>
@@ -113,11 +169,8 @@ export function Footer() {
             <li>
               <Link
                 href="#terms"
-                className="hover:text-paper"
-                style={{
-                  transition:
-                    "color var(--duration-fast) var(--ease-out-quint)",
-                }}
+                className="link-underline"
+                data-cursor="grow"
               >
                 Terms
               </Link>
@@ -125,11 +178,8 @@ export function Footer() {
             <li>
               <Link
                 href="#cookies"
-                className="hover:text-paper"
-                style={{
-                  transition:
-                    "color var(--duration-fast) var(--ease-out-quint)",
-                }}
+                className="link-underline"
+                data-cursor="grow"
               >
                 Cookies
               </Link>
@@ -152,29 +202,31 @@ function FooterColumn({
 }) {
   return (
     <div className={className}>
-      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-paper/55">
+      <p
+        className="font-mono text-[10px] uppercase tracking-[0.28em]"
+        style={{ color: "var(--color-cinnabar)" }}
+      >
         {title}
       </p>
-      <ul className="mt-5 space-y-2.5 text-sm text-paper/75">
+      <ul className="mt-6 space-y-3 text-base">
         {links.map((l) => (
           <li key={l.label}>
             <Link
               href={l.href}
-              className="group relative inline-block py-0.5 hover:text-accent"
+              data-cursor="grow"
+              className="link-underline inline-block"
               style={{
-                transition:
-                  "color var(--duration-fast) var(--ease-out-quint)",
+                color: "rgba(244,239,230,0.85)",
+                transition: "color var(--duration-fast) var(--ease-out-quint)",
               }}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.color = "var(--color-cinnabar)")
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.color = "rgba(244,239,230,0.85)")
+              }
             >
-              <span>{l.label}</span>
-              <span
-                aria-hidden
-                className="absolute -bottom-px left-0 right-0 block h-px origin-left scale-x-0 bg-accent group-hover:scale-x-100"
-                style={{
-                  transition:
-                    "transform var(--duration-base) var(--ease-out-quint)",
-                }}
-              />
+              {l.label}
             </Link>
           </li>
         ))}

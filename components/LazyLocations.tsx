@@ -16,16 +16,30 @@ export function LazyLocations() {
 
 function LocationsPlaceholder() {
   return (
-    <section className="bg-ink text-paper" aria-busy>
-      <div className="mx-auto max-w-7xl px-4 py-20 md:px-10 md:py-28 lg:px-16">
-        <div className="grid gap-6 md:grid-cols-12 md:gap-10">
-          <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-paper/60 md:col-span-3">
-            <span className="mr-3 inline-block h-px w-8 align-middle bg-paper/40" />
-            Locations
+    <section
+      aria-busy
+      style={{
+        backgroundColor: "var(--color-carbon)",
+        color: "var(--color-kapur)",
+      }}
+    >
+      <div className="mx-auto max-w-[1400px] px-6 py-24 md:px-8 md:py-32">
+        <div className="grid gap-8 md:grid-cols-12">
+          <p
+            className="md:col-span-4 font-mono text-[10px] uppercase tracking-[0.28em]"
+            style={{ color: "var(--color-cinnabar)" }}
+          >
+            — №05 — Locations
           </p>
-          <div className="h-16 animate-pulse rounded bg-paper/5 md:col-span-9" />
+          <div
+            className="h-16 animate-pulse md:col-span-8"
+            style={{ backgroundColor: "rgba(244,239,230,0.04)" }}
+          />
         </div>
-        <div className="mt-14 h-[420px] animate-pulse rounded-xl bg-paper/5 md:mt-20 md:h-[560px] lg:h-[640px]" />
+        <div
+          className="mt-12 h-[440px] animate-pulse md:mt-16 md:h-[600px] lg:h-[680px]"
+          style={{ backgroundColor: "rgba(244,239,230,0.04)" }}
+        />
       </div>
     </section>
   );

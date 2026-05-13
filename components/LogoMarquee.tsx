@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Marquee } from "@/components/Marquee";
 
 const CLIENTS = [
   "Indofood",
@@ -17,52 +17,130 @@ const CLIENTS = [
   "Coca-Cola",
 ] as const;
 
-const FADE_MASK =
-  "linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)";
+const CLIENTS_REV = [
+  "Sampoerna",
+  "Wings Group",
+  "Mayora",
+  "Sinar Mas",
+  "Lion Air",
+  "Bluebird",
+  "Ovo",
+  "DANA",
+  "Indomaret",
+  "Alfamart",
+  "ASUS",
+  "Samsung",
+] as const;
 
 export function LogoMarquee() {
-  const [paused, setPaused] = useState(false);
-
   return (
     <section
-      className="bg-paper py-16 md:py-20"
+      className="relative"
+      style={{ backgroundColor: "var(--color-kapur)" }}
       aria-label="Selected clients"
     >
-      <p className="px-6 pb-1 text-center text-xs font-semibold uppercase tracking-[0.2em] text-muted md:px-10">
-        Trusted by brands across Indonesia
-      </p>
-      <div
-        className="mt-8 overflow-hidden"
-        onMouseEnter={() => setPaused(true)}
-        onMouseLeave={() => setPaused(false)}
-        style={{
-          maskImage: FADE_MASK,
-          WebkitMaskImage: FADE_MASK,
-        }}
-      >
-        <div
-          className="flex w-max animate-marquee"
-          style={{ animationPlayState: paused ? "paused" : "running" }}
-        >
-          <Track />
-          <Track />
+      <div className="mx-auto max-w-[1400px] px-6 pt-20 md:px-8 md:pt-28">
+        <div className="grid gap-8 md:grid-cols-12">
+          <div className="md:col-span-4">
+            <div className="flex items-center gap-3">
+              <span
+                className="h-px w-10"
+                style={{ backgroundColor: "var(--color-cinnabar)" }}
+              />
+              <span
+                className="font-mono text-[10px] uppercase tracking-[0.28em]"
+                style={{ color: "var(--color-cinnabar)" }}
+              >
+                №06 — Trusted by
+              </span>
+            </div>
+          </div>
+          <div className="md:col-span-8">
+            <h2
+              className="font-display tracking-[-0.035em]"
+              style={{
+                fontSize: "clamp(2rem, 4.5vw, 4rem)",
+                lineHeight: 1,
+                color: "var(--color-carbon)",
+                fontWeight: 300,
+                fontVariationSettings: '"opsz" 144, "SOFT" 100',
+              }}
+            >
+              Half a century of{" "}
+              <span
+                className="text-cinnabar"
+                style={{
+                  fontStyle: "italic",
+                  fontVariationSettings:
+                    '"opsz" 144, "SOFT" 100, "WONK" 1',
+                }}
+              >
+                household names.
+              </span>
+            </h2>
+          </div>
         </div>
       </div>
-    </section>
-  );
-}
 
-function Track() {
-  return (
-    <ul className="flex shrink-0 items-center">
-      {CLIENTS.map((c) => (
-        <li
-          key={c}
-          className="flex items-center gap-12 px-8 pb-1 text-2xl font-semibold tracking-tight text-ink/30 md:text-3xl"
-        >
-          <span>{c}</span>
-        </li>
-      ))}
-    </ul>
+      <div className="mt-14 md:mt-16">
+        <Marquee speed="slow" fade>
+          <ul className="flex shrink-0 items-center">
+            {CLIENTS.map((c) => (
+              <li
+                key={c}
+                className="flex items-center gap-12 px-6 md:px-10"
+                style={{
+                  fontFamily: "var(--font-display)",
+                  fontVariationSettings: '"opsz" 144, "SOFT" 100',
+                  fontSize: "clamp(2.5rem, 7vw, 5.5rem)",
+                  fontWeight: 300,
+                  letterSpacing: "-0.035em",
+                  color: "var(--color-carbon)",
+                }}
+              >
+                <span>{c}</span>
+                <span
+                  aria-hidden
+                  className="text-cinnabar"
+                  style={{
+                    fontStyle: "italic",
+                    fontVariationSettings:
+                      '"opsz" 144, "SOFT" 100, "WONK" 1',
+                    fontSize: "0.7em",
+                  }}
+                >
+                  ✦
+                </span>
+              </li>
+            ))}
+          </ul>
+        </Marquee>
+
+        <Marquee speed="mid" reverse fade>
+          <ul className="flex shrink-0 items-center">
+            {CLIENTS_REV.map((c) => (
+              <li
+                key={c}
+                className="flex items-center gap-12 px-6 md:px-10"
+                style={{
+                  fontFamily: "var(--font-display)",
+                  fontStyle: "italic",
+                  fontVariationSettings: '"opsz" 144, "SOFT" 100, "WONK" 1',
+                  fontSize: "clamp(2rem, 5.5vw, 4.5rem)",
+                  fontWeight: 300,
+                  letterSpacing: "-0.025em",
+                  color: "var(--color-graphite)",
+                }}
+              >
+                <span>{c}</span>
+                <span aria-hidden style={{ color: "var(--color-cinnabar)" }}>
+                  ◍
+                </span>
+              </li>
+            ))}
+          </ul>
+        </Marquee>
+      </div>
+    </section>
   );
 }
